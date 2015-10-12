@@ -8,11 +8,11 @@
     <script src="libs/phaser.js"></script>
     <script src="Boot.js"></script>
     <script src="Preloader.js"></script>
-    <script src="Title.js"></script>
+<!--    <script src="Title.js"></script>
     <script src="MainMenu.js"></script>
     <script src="NinjaTitle.js"></script>
     <script src="Ninja.js"></script>
-    <script type="text/javascript"src="cordova.js"></script>
+    <script type="text/javascript"src="cordova.js"></script>-->
     <style>
         body {
             padding: 0;
@@ -26,12 +26,12 @@
 <script type="text/javascript">
     window.onload = function() {
         var game = new Phaser.Game(540, 960, Phaser.AUTO, 'gameContainer');
-        game.state.add('Boot', Comp523.Boot);
-        game.state.add('Preloader',Comp523.Preloader);
-        game.state.add('Title',Comp523.StartMenu);
-        game.state.add('MainMenu',Comp523.Game);
-        game.state.add('NinjaTitle',Comp523.NinjaTitle);
-        game.state.add('Ninja',Comp523.Ninja);
+        game.state.add('Boot', LanguageGame.Boot);
+        game.state.add('Preloader',LanguageGame.Preloader);
+        game.state.add('Title',LanguageGame.StartMenu);
+        game.state.add('MainMenu',LanguageGame.Game);
+        game.state.add('NinjaTitle',LanguageGame.NinjaTitle);
+        game.state.add('Ninja',LanguageGame.Ninja);
         game.state.start('Boot');
     }
 </script>

@@ -5,8 +5,8 @@ var LanguageGame = {};
 LanguageGame.Boot=function(game){};
 LanguageGame.Boot.prototype={
   preload: function(){
-    this.load.image('preloadBar','assets/images/loading.png');
-      this.load.image('titleimage','assets/images/TitleImage');
+    this.load.image('preloadBar','assets/images/loader_bar.png');
+      this.load.image('titleimage','assets/images/TitleImage.png');
 
   },
     create: function(){
