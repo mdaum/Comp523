@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Bunny Defender</title>
+    <script src="libs/phaser.js"></script>
+    <script src="Boot.js"></script>
+    <script src="Preloader.js"></script>
+    <script src="Title.js"></script>
+    <script src="MainMenu.js"></script>
+    <script src="NinjaTitle.js"></script>
+    <script src="Ninja.js"></script>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body>
+<div id ="gameContainer"></div>
+<script type="text/javascript">
+    window.onload = function() {
+        var game = new Phaser.Game(540, 960, Phaser.AUTO, 'gameContainer');
+        game.state.add('Boot', Comp523.Boot);
+        game.state.add('Preloader',Comp523.Preloader);
+        game.state.add('Title',Comp523.StartMenu);
+        game.state.add('MainMenu',Comp523.Game);
+        game.state.add('NinjaTitle',Comp523.NinjaTitle);
+        game.state.add('Ninja',Comp523.Ninja);
+        game.state.start('Title');
+    }
+</script>
+</body>
+</html>
