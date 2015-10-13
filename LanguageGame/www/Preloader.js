@@ -2,7 +2,6 @@ LanguageGame.Preloader = function(game) {
     this.preloadBar = null;
     this.titleText=null;
     this.ready = false;
-    this.titleImage=null;
 };
 
 LanguageGame.Preloader.prototype = {
@@ -15,7 +14,7 @@ LanguageGame.Preloader.prototype = {
         this.titleText=this.add.image(this.world.centerX,this.world.centerY-220,'titleimage');
         this.titleText.anchor.setTo(0.5,0.5);
         this.load.image('titlescreenbackground','assets/images/sky.png');
-        this.load.image('titlescreen','assets/images/titlescreen.png');
+        this.load.image('burns','assets/images/burns.png');
     },
 
     create : function() {
