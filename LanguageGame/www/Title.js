@@ -15,8 +15,7 @@ LanguageGame.Title.prototype={
       startBG.inputEnabled = true; //now we can accept clicks/touches
       startBG.events.onInputDown.addOnce(this.nextScreen, this); //will happen when input happens
 
-      startPrompt = this.add.bitmapText(this.world.centerX-150, this.world.centerY+250, 'eightbitwonder', 'Touch to Start!', 24);
-},
+      //startPrompt = this.add.bitmapText(this.world.centerX-150, this.world.centerY+250, 'eightbitwonder', 'Touch to Start!', 24); //here is the problem
     nextScreen:function(pointer){
      this.state.start('MainMenu');
     }
