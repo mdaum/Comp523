@@ -6,7 +6,7 @@ LanguageGame.Boot=function(game){};
 LanguageGame.Boot.prototype={
   preload: function(){
     this.load.image('preloadBar','assets/images/loader_bar.png');
-      this.load.image('titleimage','assets/images/TitleImage.png');
+      this.load.image('titleimage','assets/images/title.png');
 
   },
     create: function(){
@@ -14,7 +14,7 @@ LanguageGame.Boot.prototype={
         this.stage.disableVisibilityChange = false;
         this.scaleStage();
         this.input.addPointer();
-        this.stage.backgroundColor = '#171642';
+        this.stage.backgroundColor = '#000000';
         this.state.start('Preloader');
     },
 

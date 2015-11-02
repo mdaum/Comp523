@@ -18,7 +18,10 @@ LanguageGame.Preloader.prototype = {
         this.load.image('blankwood','assets/images/blankwood.png');
         this.load.image('ninjaselect','assets/images/ninjaselect.png');
         this.load.image('WIP','assets/images/WIP.png');
-        this.load.image('card','assets/images/blankcard.png');
+        this.load.image('card','assets/images/Paper.png');
+        this.load.image('bg','assets/images/RedBack.png');
+        this.load.image('box','assets/images/box.png');
+
     },
 
     create : function() {
