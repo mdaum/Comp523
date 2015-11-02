@@ -6,6 +6,7 @@ LanguageGame.Title=function(game){
     this.startBG;
     this.startBG2;
     this.startBG3;
+    this.startPrompt;
 };
 LanguageGame.Title.prototype={
   create: function() {
@@ -14,8 +15,8 @@ LanguageGame.Title.prototype={
       startBG3 = this.add.image(this.world.centerX - 80, this.world.centerY - 50, 'burns')//burns
       startBG.inputEnabled = true; //now we can accept clicks/touches
       startBG.events.onInputDown.addOnce(this.nextScreen, this); //will happen when input happens
+      startPrompt=this.add.bitmapText(this.world.centerX-150, this.world.centerY+250,'eightbitwonder','Touch to Start', 24);
   },
-      //startPrompt = this.add.bitmapText(this.world.centerX-150, this.world.centerY+250, 'eightbitwonder', 'Touch to Start!', 24); //here is the problem
     nextScreen: function(pointer){
      this.state.start('MainMenu');
     }
