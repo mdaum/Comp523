@@ -12,7 +12,7 @@ LanguageGame.Boot.prototype={
     create: function(){
         this.input.maxPointers = 1;
         this.stage.disableVisibilityChange = false;
-        this.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
+        this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
         this.scale.minWidth = 270;
         this.scale.minHeight = 480;
         this.scale.pageAlignHorizontally = true;
