@@ -25,7 +25,7 @@ LanguageGame.Boot.prototype={
         //this.scale.minHeight = 480;
         this.scale.pageAlignHorizontally = true;
         this.scale.pageAlignVertically = true;
-        //this.stage.forcePortrait = true;
+        this.stage.forcePortrait = true;
         //this.scale.setScreenSize(true); //this is HUGE problem!!
 
 /*        if (this.game.device.desktop)

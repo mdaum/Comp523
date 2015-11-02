@@ -26,8 +26,8 @@
 <div id ="gameContainer"></div>
 <script type="text/javascript">
     window.onload = function() {
-       //var game = new Phaser.Game(540, 960, Phaser.AUTO, 'gameContainer');
-       var game = new Phaser.Game(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio, Phaser.CANVAS, 'gameContainer');
+       var game = new Phaser.Game("100", "100", Phaser.AUTO, 'gameContainer');
+       //var game = new Phaser.Game(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio, Phaser.CANVAS, 'gameContainer');
         game.state.add('Boot', LanguageGame.Boot);
         game.state.add('Preloader',LanguageGame.Preloader);
         game.state.add('Title',LanguageGame.Title);
