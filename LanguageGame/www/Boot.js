@@ -20,7 +20,7 @@ LanguageGame.Boot.prototype={
 
     scaleStage: function(){
 
-        this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
+        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         //this.scale.minWidth = 270;
         //this.scale.minHeight = 480;
         this.scale.pageAlignHorizontally = true;

@@ -1,14 +1,12 @@
 LanguageGame.Ninja = function(game) {
     this.points;
+    this.card;
 };
 
 LanguageGame.Ninja.prototype = {
     create: function() {
-        var square = this.add.graphics();
-        square.beginFill(0xffffff);
-        square.drawCircle(0, 0, 20);
-        square.position.set(4,484);
-        var tween = this.add.tween(square).to({
+        this.card = this.add.image(4,483,'card');
+        var tween = this.add.tween(this.card).to({
             x: [4,85,136,152,238,322],
             y: [483,22,273,22,483,40]
         }, 2000);
