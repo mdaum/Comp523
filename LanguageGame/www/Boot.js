@@ -20,15 +20,15 @@ LanguageGame.Boot.prototype={
 
     scaleStage: function(){
 
-        //this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
+        this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
         //this.scale.minWidth = 270;
         //this.scale.minHeight = 480;
-        //this.scale.pageAlignHorizontally = true;
-        // this.scale.pageAlignVertically = true;
+        this.scale.pageAlignHorizontally = true;
+        this.scale.pageAlignVertically = true;
         //this.stage.forcePortrait = true;
-        // this.scale.setScreenSize(true); //this is HUGE problem!!
+        //this.scale.setScreenSize(true); //this is HUGE problem!!
 
-        if (this.game.device.desktop)
+/*        if (this.game.device.desktop)
         {
             this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
             this.scale.minWidth = this.width/2;
@@ -53,6 +53,6 @@ LanguageGame.Boot.prototype={
             this.scale.enterIncorrectOrientation.add(this.enterIncorrectOrientation, this);
             this.scale.leaveIncorrectOrientation.add(this.leaveIncorrectOrientation, this);
             //this.scale.setScreenSize(true);
-        }
+        }*/
     }
 };
