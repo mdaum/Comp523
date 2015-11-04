@@ -4,6 +4,9 @@ LanguageGame.Ninja = function(game) {
     this.cardText;
     this.ningaBG;
     this.wordBox;
+    this.backBox;
+    this.backText;
+    this.backWordText;
     this.boxWordText;
     this.boxText;
     this.x1;
@@ -18,19 +21,26 @@ LanguageGame.Ninja.prototype = {
     create: function() {
         this.ningaBG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'dojo');
         this.wordBox = this.add.image(this.world.centerX - 100, this.game.height - 60, 'box');
+        this.backBox = this.add.image(0,this.game.height-60,'box');
         this.card = this.add.image(4, 400, 'card');
         this.boxWordText = "Blue";
+        this.backWordText = "Back"
         var style = {font: "50px Georgia", fill: "000000", align: "center"};
         this.boxText = this.game.add.text(this.wordBox.width / 2, this.card.height / 8 + 10, this.boxWordText, style);
         this.cardText = this.game.add.text(this.card.width / 2, this.card.height / 2, String.fromCharCode(34253), style);
+        this.backText = this.game.add.text(this.backBox.width/2,this.backBox.height/2-35,this.backWordText, style);
         this.boxText.anchor.set(0.5);
         this.cardText.anchor.set(0.5);
+        this.backText.anchor.set(0.5);
         this.card.addChild(this.cardText);
         this.wordBox.addChild(this.boxText);
+        this.backBox.addChild(this.backText);
 
        this.card.events.onInputDown.addOnce(this.stopCard, this); //will happen when input happens
        this.cardText.events.onInputDown.addOnce(this.stopCard, this); //will happen when input happens
 
+        this.backBox.inputEnabled = true; //now we can accept clicks/touches
+        this.backBox.events.onInputDown.addOnce(this.back, this); //will happen when input happens
 
         var tween = this.add.tween(this.card).to({
             x: [4, 100, 136, 300, 438, 500],
@@ -65,6 +75,10 @@ LanguageGame.Ninja.prototype = {
 
     stopCard: function(game){
         this.tween.pause();
+    },
+
+    back: function(pointer){
+        this.state.start('MainMenu');
     }
 };
 
