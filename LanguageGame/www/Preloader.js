@@ -14,8 +14,8 @@ LanguageGame.Preloader.prototype = {
         this.titleText=this.add.image(this.world.centerX,this.world.centerY-220,'titleimage');
         this.titleText.anchor.setTo(0.5,0.5);
         this.load.image('titlescreenbackground','assets/images/sky.png');
-        this.load.image('burns','assets/images/burns.png');
-        this.load.image('blankwood','assets/images/blankwood.png');
+        this.load.image('building','assets/images/building.png');
+        this.load.image('dojo','assets/images/dojo.png');
         this.load.image('ninjaselect','assets/images/ninjaselect.png');
         this.load.image('WIP','assets/images/WIP.png');
         this.load.image('card','assets/images/Paper.png');
