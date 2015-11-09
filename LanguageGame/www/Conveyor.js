@@ -2,141 +2,128 @@
  * Created by sgbyers on 11/3/2015.
  */
 
-LanguageGame.Conveyor = function(game) {
-    this.points;
+LanguageGame.Conveyor = function (game) {
+    this.points = 0;
 
-    this.card;
-    this.card2;
-    this.card3;
+    this.card = null;
+    this.style = null;
+    this.ningaBG = null;
+    this.wordBox = null;
+    this.backBox = null;
 
-    this.cardText;
-    this.cardText2;
-    this.cardText3;
+    this.xf = 0;
 
-    this.ningaBG;
-    this.wordBox;
-    this.boxWordText;
-    this.boxText;
-
-    this.xf;
-
-    this.backBox;
-    this.backText;
-    this.backWordText;
+    this.cardArray = [];
+    this.tweenArray = [];
 };
 
 LanguageGame.Conveyor.prototype = {
 
-    create: function() {
+    create: function () {
 
         this.xf = this.game.width;
-
         this.card = this.add.image(-800, -800, 'card');//dummy card
-
         this.ningaBG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'bg');
+        this.style = {font: "50px Georgia", fill: "000000", align: "center"};
 
-        this.buildBackBox(this);
-        this.buildWordBox(this);
-        this.buildCards(this);
-        this.tweenCard(this);
-
+        this.buildBackBox();
+        this.buildWordBox();
+        this.buildCards();
+        this.tweenCard();
 
     },
 
-    buildBackBox: function(game){
-        this.backBox = this.add.image(0,this.game.height-60,'box');
-        this.backWordText = "Back";
-        var style = {font: "50px Georgia", fill: "000000", align: "center"};
-        this.backText = this.game.add.text(this.backBox.width/2,this.backBox.height/2-35,this.backWordText, style);
-        this.backText.anchor.set(0.5);
-        this.backBox.addChild(this.backText);
+    stopCard: function (pointer, card, tween) {
+        tween.stop(true);
+    },
+
+    buildBackBox: function () {
+        this.backBox = this.add.image(0, this.game.height - 60, 'box');
+        var backWordText = "Back";
+        var backText = this.game.add.text(this.backBox.width / 2, this.backBox.height / 2 - 35, backWordText, this.style);
+        backText.anchor.set(0.5);
+        this.backBox.addChild(backText);
 
         this.backBox.inputEnabled = true; //now we can accept clicks/touches
         this.backBox.events.onInputDown.addOnce(this.back, this); //will happen when input happens
 
     },
 
-    buildWordBox: function(game){
+    buildWordBox: function () {
         this.wordBox = this.add.image(this.world.centerX - 100, this.game.height - 60, 'box');
-        this.boxWordText = "Blue";
+        this.wordBox.addChild(this.getBoxText());
+
+    },
+
+    buildCards: function () {
+
+        var y1 = 10;
+        var x = 0 - this.card.width;
+
+        for (var i = 0; i < 3; i++) {
+            this.cardArray[i] = this.add.image(x, y1 + (i * (this.card.height + 5)), 'card');
+            this.cardArray[i].addChild(this.getCardText(i));
+        }
+
+    },
+
+    getBoxText: function(){
+        var boxWordText = "Blue";
+        var boxText = this.game.add.text(this.wordBox.width / 2, this.card.height / 8 + 10, boxWordText, this.style);
+        boxText.anchor.set(0.5);
+        return(boxText);
+    },
+
+    getCardText: function(num){
         var style = {font: "50px Georgia", fill: "000000", align: "center"};
+        switch (num) {
+            case 0:
+                var cardText = this.game.add.text(this.card.width / 2, this.card.height / 2, String.fromCharCode(34253), style);
+                cardText.anchor.set(0.5);
+                return (cardText);
+                break;
+            case 1:
+                var cardText2 = this.game.add.text(this.card.width / 2, this.card.height / 2, String.fromCharCode(32169), style);
+                cardText2.anchor.set(0.5);
+                return (cardText2);
+                break;
+            case 2:
+                var cardText3 = this.game.add.text(this.card.width / 2, this.card.height / 2, String.fromCharCode(32043), style);
+                cardText3.anchor.set(0.5);
+                return (cardText3);
+                break;
+            default:
+                break;
+        }
+    },
 
-        this.boxText = this.game.add.text(this.wordBox.width / 2, this.card.height / 8 + 10, this.boxWordText, style);
-        this.boxText.anchor.set(0.5);
-        this.wordBox.addChild(this.boxText);
+    tweenCard: function () {
+
+        var y1 = 10;
+        for (var i = 0; i < 3; i++) {
+            this.tweenArray[i] = this.add.tween(this.cardArray[i]).to({
+                x: [this.xf],
+                y: [y1 + (i * (this.card.height + 5))]
+            }, 7500);
+
+            var tweenFin = this.add.tween(this.cardArray[i]).to({x: [-800], y: [-500]}, 1);
+            this.tweenArray[i].chain(tweenFin);
+            this.tweenArray[i].repeat(Infinity);
+            this.cardArray[i].events.onInputDown.addOnce(this.stopCard, this, this.cardArray[i], this.tweenArray[i]); //will happen when input happens
+            this.tweenArray[i].delay(i*(3000*Math.random()));
+        }
+
+        //need to think of math to incorporate this in to loop based off of index: mod?
+        //this.tweenArray[1].delay(3000);
+        //this.tweenArray[2].delay(1000);
+
+        for (var j = 0; j < 3; j++) {
+            this.tweenArray[j].start();
+        }
 
     },
 
-    buildCards: function(game){
-
-        var style = {font: "50px Georgia", fill: "000000", align: "center"};
-
-        y1=10;
-        this.card = this.add.image(0,y1, 'card');
-        y2 = y1+this.card.height+5;
-        this.card2 = this.add.image(0- this.card.width, y2, 'card');
-        y3 = y2+this.card.height+5;
-        this.card3 = this.add.image(0- this.card.width, y3, 'card');
-        this.cardText = this.game.add.text(this.card.width / 2, this.card.height / 2, String.fromCharCode(34253), style);
-        this.cardText2 = this.game.add.text(this.card.width / 2, this.card.height / 2, String.fromCharCode(32169), style);
-        this.cardText3 = this.game.add.text(this.card.width / 2, this.card.height / 2, String.fromCharCode(32043), style);
-        this.cardText.anchor.set(0.5);
-        this.cardText2.anchor.set(0.5);
-        this.cardText3.anchor.set(0.5);
-        this.card.addChild(this.cardText);
-        this.card2.addChild(this.cardText2);
-        this.card3.addChild(this.cardText3);
-
-    },
-
-    tweenCard: function(game){
-        tween = this.add.tween(this.card).to({
-            x: [this.xf],
-            y: [y1]
-        }, 7500);
-
-        tween2 = this.add.tween(this.card2).to({
-            x: [this.xf],
-            y: [y2]
-        }, 7500);
-
-        tween3 = this.add.tween(this.card3).to({
-            x: [this.xf],
-            y: [y3]
-        }, 7500);
-
-        tween.interpolation(function (v, k) {
-            return Phaser.Math.linearInterpolation(v, k);
-        });
-
-        tween2.interpolation(function (v, k) {
-            return Phaser.Math.linearInterpolation(v, k);
-        });
-
-        tween3.interpolation(function (v, k) {
-            return Phaser.Math.linearInterpolation(v, k);
-        });
-
-        this.card.events.onInputDown.addOnce(this.stopCard, this, this.card, tween); //will happen when input happens
-        //this.cardText.events.onInputDown.addOnce(this.stopCard, this); //will happen when input happens
-
-        tween.repeat(Infinity);
-        tween.start();
-
-        tween2.delay(3000);
-        tween2.repeat(Infinity);
-        tween2.start();
-
-        tween3.delay(1000);
-        tween3.repeat(Infinity);
-        tween3.start();
-    },
-
-    stopCard: function(pointer, card, tween){
-      tween.stop(true);
-    },
-
-    back: function(pointer){
+    back: function (pointer) {
         this.state.start('MainMenu');
     }
 
