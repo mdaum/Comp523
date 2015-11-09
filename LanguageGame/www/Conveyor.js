@@ -18,17 +18,7 @@ LanguageGame.Conveyor = function(game) {
     this.boxWordText;
     this.boxText;
 
-    this.x1;
-    this.x2
-    this.x3;
-    this.x4;
-    this.x5;
-    this.x6;
     this.xf;
-
-    this.y1;
-    this.y2;
-    this.y3;
 
     this.backBox;
     this.backText;
@@ -39,64 +29,79 @@ LanguageGame.Conveyor.prototype = {
 
     create: function() {
 
-        x1 = 4;
-        xf = this.game.width;
+        this.xf = this.game.width;
 
-        x3 = 136;
-        x4 = 300;
-        x5 = 438;
-        x6 = 500;
-
-        y1=10;
-
+        this.card = this.add.image(-800, -800, 'card');//dummy card
 
         this.ningaBG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'bg');
-        this.wordBox = this.add.image(this.world.centerX - 100, this.game.height - 60, 'box');
+
+        this.buildBackBox(this);
+        this.buildWordBox(this);
+        this.buildCards(this);
+        this.tweenCard(this);
+
+
+    },
+
+    buildBackBox: function(game){
         this.backBox = this.add.image(0,this.game.height-60,'box');
+        this.backWordText = "Back";
+        var style = {font: "50px Georgia", fill: "000000", align: "center"};
+        this.backText = this.game.add.text(this.backBox.width/2,this.backBox.height/2-35,this.backWordText, style);
+        this.backText.anchor.set(0.5);
+        this.backBox.addChild(this.backText);
+
+        this.backBox.inputEnabled = true; //now we can accept clicks/touches
+        this.backBox.events.onInputDown.addOnce(this.back, this); //will happen when input happens
+
+    },
+
+    buildWordBox: function(game){
+        this.wordBox = this.add.image(this.world.centerX - 100, this.game.height - 60, 'box');
+        this.boxWordText = "Blue";
+        var style = {font: "50px Georgia", fill: "000000", align: "center"};
+
+        this.boxText = this.game.add.text(this.wordBox.width / 2, this.card.height / 8 + 10, this.boxWordText, style);
+        this.boxText.anchor.set(0.5);
+        this.wordBox.addChild(this.boxText);
+
+    },
+
+    buildCards: function(game){
+
+        var style = {font: "50px Georgia", fill: "000000", align: "center"};
+
+        y1=10;
         this.card = this.add.image(0,y1, 'card');
         y2 = y1+this.card.height+5;
         this.card2 = this.add.image(0- this.card.width, y2, 'card');
         y3 = y2+this.card.height+5;
         this.card3 = this.add.image(0- this.card.width, y3, 'card');
-        this.backWordText = "Back";
-        this.boxWordText = "Blue";
-        var style = {font: "50px Georgia", fill: "000000", align: "center"};
-        this.boxText = this.game.add.text(this.wordBox.width / 2, this.card.height / 8 + 10, this.boxWordText, style);
-        this.backText = this.game.add.text(this.backBox.width/2,this.backBox.height/2-35,this.backWordText, style);
         this.cardText = this.game.add.text(this.card.width / 2, this.card.height / 2, String.fromCharCode(34253), style);
         this.cardText2 = this.game.add.text(this.card.width / 2, this.card.height / 2, String.fromCharCode(32169), style);
         this.cardText3 = this.game.add.text(this.card.width / 2, this.card.height / 2, String.fromCharCode(32043), style);
-        this.backText.anchor.set(0.5);
-        this.boxText.anchor.set(0.5);
         this.cardText.anchor.set(0.5);
         this.cardText2.anchor.set(0.5);
         this.cardText3.anchor.set(0.5);
         this.card.addChild(this.cardText);
         this.card2.addChild(this.cardText2);
         this.card3.addChild(this.cardText3);
-        this.wordBox.addChild(this.boxText);
-        this.backBox.addChild(this.backText);
 
-        this.card.events.onInputDown.addOnce(this.stopCard, this); //will happen when input happens
-        this.cardText.events.onInputDown.addOnce(this.stopCard, this); //will happen when input happens
+    },
 
-        this.backBox.inputEnabled = true; //now we can accept clicks/touches
-        this.backBox.events.onInputDown.addOnce(this.back, this); //will happen when input happens
-
-
-
+    tweenCard: function(game){
         tween = this.add.tween(this.card).to({
-            x: [xf],
+            x: [this.xf],
             y: [y1]
         }, 7500);
 
         tween2 = this.add.tween(this.card2).to({
-            x: [xf],
+            x: [this.xf],
             y: [y2]
         }, 7500);
 
         tween3 = this.add.tween(this.card3).to({
-            x: [xf],
+            x: [this.xf],
             y: [y3]
         }, 7500);
 
@@ -112,6 +117,9 @@ LanguageGame.Conveyor.prototype = {
             return Phaser.Math.linearInterpolation(v, k);
         });
 
+        this.card.events.onInputDown.addOnce(this.stopCard, this, this.card, tween); //will happen when input happens
+        //this.cardText.events.onInputDown.addOnce(this.stopCard, this); //will happen when input happens
+
         tween.repeat(Infinity);
         tween.start();
 
@@ -124,8 +132,8 @@ LanguageGame.Conveyor.prototype = {
         tween3.start();
     },
 
-    stopCard: function(game){
-        this.tween.pause();
+    stopCard: function(pointer, card, tween){
+      tween.stop(true);
     },
 
     back: function(pointer){
