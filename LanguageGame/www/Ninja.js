@@ -1,7 +1,6 @@
 LanguageGame.Ninja = function (game) {
     this.points;
     this.card;
-    this.cardText;
     this.ningaBG;
     this.wordBox;
     this.backBox;

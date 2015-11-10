@@ -23,7 +23,7 @@ LanguageGame.Conveyor.prototype = {
 
         this.xf = this.game.width;
         this.card = this.add.image(-800, -800, 'card');//dummy card
-        this.ningaBG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'bg');
+        this.ningaBG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'belt');
         this.style = {font: "50px Georgia", fill: "000000", align: "center"};
 
         this.buildBackBox();

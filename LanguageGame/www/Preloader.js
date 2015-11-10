@@ -13,12 +13,13 @@ LanguageGame.Preloader.prototype = {
         this.load.bitmapFont('eightbitwonder', 'assets/fonts/eightbitwonder.png', 'assets/fonts/eightbitwonder.fnt');
         this.titleText=this.add.image(this.world.centerX,this.world.centerY-220,'titleimage');
         this.titleText.anchor.setTo(0.5,0.5);
-        this.load.image('building','assets/images/building.png');
-        this.load.image('dojo','assets/images/dojo.png');
-        this.load.image('card','assets/images/Paper.png');
-        this.load.image('bg','assets/images/RedBack.png');
-        this.load.image('box','assets/images/box.png');
-        this.load.image('stars','assets/images/Stars.png');
+        this.load.image('building','assets/images/building.png'); //title page image
+        this.load.image('dojo','assets/images/dojo.png'); //ninja background
+        this.load.image('card','assets/images/Paper.png'); //blank card
+        this.load.image('bg','assets/images/RedBack.png'); //generic background
+        this.load.image('box','assets/images/box.png'); // "button" place holder
+        this.load.image('stars','assets/images/Stars.png'); //wordaga background
+        this.load.image('belt','assets/images/Conveyor.png');
 
     },
 
