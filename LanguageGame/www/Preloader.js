@@ -18,6 +18,7 @@ LanguageGame.Preloader.prototype = {
         this.load.image('card','assets/images/Paper.png');
         this.load.image('bg','assets/images/RedBack.png');
         this.load.image('box','assets/images/box.png');
+        this.load.image('stars','assets/images/Stars.png');
 
     },
 

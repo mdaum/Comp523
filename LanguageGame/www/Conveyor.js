@@ -109,16 +109,12 @@ LanguageGame.Conveyor.prototype = {
             var tweenFin = this.add.tween(this.cardArray[i]).to({x: [-800], y: [-500]}, 1);
             this.tweenArray[i].chain(tweenFin);
             this.tweenArray[i].repeat(Infinity);
+            this.cardArray[i].inputEnabled = true;
             this.cardArray[i].events.onInputDown.addOnce(this.stopCard, this, this.cardArray[i], this.tweenArray[i]); //will happen when input happens
-            this.tweenArray[i].delay(i*(3000*Math.random()));
-        }
 
-        //need to think of math to incorporate this in to loop based off of index: mod?
-        //this.tweenArray[1].delay(3000);
-        //this.tweenArray[2].delay(1000);
-
-        for (var j = 0; j < 3; j++) {
-            this.tweenArray[j].start();
+            //juvenile random delay computation
+            this.tweenArray[i].delay((3000*Math.random())+500);
+            this.tweenArray[i].start();
         }
 
     },

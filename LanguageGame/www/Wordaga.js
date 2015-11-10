@@ -17,7 +17,7 @@ LanguageGame.Wordaga = function (game) {
 LanguageGame.Wordaga.prototype = {
     create: function () {
 
-        this.ningaBG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'bg');
+        this.ningaBG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'stars');
         this.card = this.add.image(-800, -800, 'card');//dummy card
 
         this.createButtons();
@@ -71,8 +71,8 @@ LanguageGame.Wordaga.prototype = {
                 y: this.cardArray[i].y
             }, 1);
 
-            var tween2 = this.game.add.tween(this.cardArray[i]).to({x: -800, y: -500}, 1);
-            this.tweenArray[i].chain(tween2);
+            var tweenFin = this.game.add.tween(this.cardArray[i]).to({x: -800, y: -500}, 1);
+            this.tweenArray[i].chain(tweenFin);
             this.tweenArray[i].repeat(Infinity);
             this.tweenArray[i].start();
             this.cardArray[i].events.onInputDown.addOnce(this.stopCard, this, this.cardArray[i], this.tweenArray[i]); //will happen when input happens
