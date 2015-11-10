@@ -6,23 +6,32 @@ LanguageGame.Ninja = function (game) {
     this.backBox;
     this.backText;
     this.backWordText;
-    this.boxWordText;
+    //this.boxWordText;
     this.boxText;
     this.numCards;
+    this.ninjaDB;
 };
 
 LanguageGame.Ninja.prototype = {
     create: function () {
+        this.ninjaDB = new SQL.Database();
         this.numCards = 0;
+
+        this.populateDatabase(this);
+
+        var results = this.ninjaDB.exec("SELECT english, unicode FROM test T WHERE T.category like '%number%'");
+        var randNumber = Math.floor(Math.random() * 9);
+        var boxWordText = results[0]["values"][randNumber][0];
+        var unicodeVal = results[0]["values"][randNumber][1];
 
         this.ningaBG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'dojo');
         this.wordBox = this.add.image(this.world.centerX - 100, this.game.height - 60, 'box');
         this.backBox = this.add.image(0, this.game.height - 60, 'box');
         this.card = this.add.image(-400, -400, 'card');
-        this.boxWordText = "Blue";
+       // this.boxWordText = "Blue";
         this.backWordText = "Back";
         var style = {font: "50px Georgia", fill: "000000", align: "center"};
-        this.boxText = this.game.add.text(this.wordBox.width / 2, this.card.height / 8 + 10, this.boxWordText, style);
+        this.boxText = this.game.add.text(this.wordBox.width / 2, this.card.height / 8 + 10, boxWordText, style);
         this.backText = this.game.add.text(this.backBox.width / 2, this.backBox.height / 2 - 35, this.backWordText, style);
         this.boxText.anchor.set(0.5);
         this.backText.anchor.set(0.5);
@@ -33,10 +42,25 @@ LanguageGame.Ninja.prototype = {
         this.backBox.events.onInputDown.addOnce(this.back, this); //will happen when input happens
 
         for(var i = 0; i <3;i++) {
-            this.newCard(this);
+            this.newCard(this,unicodeVal);
         }
 
     },
+
+    populateDatabase: function(game) {
+        this.ninjaDB.run("CREATE TABLE test( wid INT PRIMARY KEY, english TEXT, category TEXT, unicode INT)");
+        this.ninjaDB.run("INSERT INTO test VALUES (1, 'one', 'numbers', 19968)");
+        this.ninjaDB.run("INSERT INTO test VALUES (2, 'two', 'numbers', 20108)");
+        this.ninjaDB.run("INSERT INTO test VALUES (3, 'three', 'numbers', 19977)");
+        this.ninjaDB.run("INSERT INTO test VALUES (4, 'four', 'numbers', 22235)");
+        this.ninjaDB.run("INSERT INTO test VALUES (5, 'five', 'numbers', 20116)");
+        this.ninjaDB.run("INSERT INTO test VALUES (6, 'six', 'numbers', 20845)");
+        this.ninjaDB.run("INSERT INTO test VALUES (7, 'seven', 'numbers', 19971)");
+        this.ninjaDB.run("INSERT INTO test VALUES (8, 'eight', 'numbers', 20843)");
+        this.ninjaDB.run("INSERT INTO test VALUES (9, 'nine', 'numbers', 20061)");
+        this.ninjaDB.run("INSERT INTO test VALUES (10, 'ten', 'numbers', 21313)");
+    },
+
 
     stopCard: function (pointer, card,tween) {
         tween.stop(true);
@@ -45,12 +69,12 @@ LanguageGame.Ninja.prototype = {
 
     },
 
-    newCard: function (game) {
+    newCard: function (game,unicodeVal) {
         this.numCards++;
         var style = {font: "50px Georgia", fill: "000000", align: "center"};
 
         var card = this.add.image(0, this.game.height, 'card');
-        var cardText = this.game.add.text(card.width / 2, card.height / 2, String.fromCharCode(34253), style);
+        var cardText = this.game.add.text(card.width / 2, card.height / 2, String.fromCharCode(unicodeVal), style);
         cardText.anchor.set(0.5);
         card.addChild(cardText);
 
