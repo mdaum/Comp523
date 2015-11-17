@@ -2,7 +2,7 @@
  * Created by mdaum on 10/12/2015.
  */
 LanguageGame.Title=function(game){
-  this.startPrompt;
+    this.startPrompt;
     this.startBG;
     this.startBG2;
     this.startBG3;

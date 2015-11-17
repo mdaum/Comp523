@@ -1,14 +1,14 @@
 LanguageGame.Ninja = function (game) {
-    this.points;
-    this.card;
-    this.ningaBG;
-    this.wordBox;
-    this.backBox;
-    this.backText;
-    this.backWordText;
+    this.points = null;
+    this.card = null;
+    this.ninjaBG = null;
+    this.wordBox = null;
+    this.backBox = null;
+    this.backText = "";
+    this.backWordText = "";
     //this.boxWordText;
-    this.boxText;
-    this.numCards;
+    this.boxText = "";
+    this.numCards = 0;
 };
 
 LanguageGame.Ninja.prototype = {
@@ -21,7 +21,7 @@ LanguageGame.Ninja.prototype = {
         var boxWordText = results[0]["values"][randNumber][0];
         var unicodeVal = results[0]["values"][randNumber][1];
 
-        this.ningaBG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'dojo');
+        this.ninjaBG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'dojo');
         this.wordBox = this.add.image(this.world.centerX - 100, this.game.height - 60, 'box');
         this.backBox = this.add.image(0, this.game.height - 60, 'box');
         this.card = this.add.image(-400, -400, 'card');

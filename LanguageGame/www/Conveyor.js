@@ -1,7 +1,6 @@
 /**
  * Created by sgbyers on 11/3/2015.
  */
-
 LanguageGame.Conveyor = function (game) {
     this.points = 0;
 
