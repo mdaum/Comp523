@@ -25,7 +25,7 @@ LanguageGame.Boot=function(game){
         var uInt8Array = new Uint8Array(this.response);
         LanguageGame.gameDB = new SQL.Database(uInt8Array);
     };
-    xhr.send();
+    xhr.send(); 
 };
 LanguageGame.Boot.prototype={
   preload: function(){
