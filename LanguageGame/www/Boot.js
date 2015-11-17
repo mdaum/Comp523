@@ -13,7 +13,12 @@ LanguageGame.Boot=function(game){
 
 
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:63342/Comp523/LanguageGame/www/databases/test.db', true);
+    if(window.navigator.platform.toLowerCase().indexOf("win")==-1&&window.navigator.platform.toLowerCase().indexOf("mac")==-1){
+        xhr.open('GET','file:///android_asset/www/databases/test.db'); //android version
+    }
+    else{
+        xhr.open('GET', 'http://localhost:63342/Comp523/LanguageGame/www/databases/test.db', true);//pc version
+    }
     xhr.responseType = 'arraybuffer';
 
     xhr.onload = function(e) {
