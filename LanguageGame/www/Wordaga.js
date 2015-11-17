@@ -8,7 +8,7 @@ LanguageGame.Wordaga = function (game) {
     this.cardArray = [];
     this.tweenArray = [];
 
-    this.ningaBG = null;
+    this.wordBG = null;
     this.wordBox = null;
     this.backBox = null;
 
@@ -17,7 +17,7 @@ LanguageGame.Wordaga = function (game) {
 LanguageGame.Wordaga.prototype = {
     create: function () {
 
-        this.ningaBG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'stars');
+        this.wordBG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'stars');
         this.card = this.add.image(-800, -800, 'card');//dummy card
 
         this.createButtons();
