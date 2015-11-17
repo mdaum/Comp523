@@ -12,9 +12,9 @@
     <script src="Title.js"></script>
    <script src="MainMenu.js"></script>
     <!--   <script src="NinjaTitle.js"></script>-->
-   <script src="Ninja.js"></script>>
-    <script src="Wordaga.js"></script>>
-    <script src="Conveyor.js"></script>>
+   <script src="Ninja.js"></script>
+    <script src="Wordaga.js"></script>
+    <script src="Conveyor.js"></script>
 
 
     <script type="text/javascript"src="cordova.js"></script><!--Just comment this out when you want to run w/o cordova-->
@@ -24,20 +24,33 @@
             margin: 0;
             background-color: #000000;
         }
+        .dbInput {
+            position: relative;
+            overflow: hidden;
+            margin: 10px;
+        }
+        .dbInput input.input {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            padding: 0;
+            font-size: 20px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 <div id ="gameContainer"></div>
+
 <script type="text/javascript">
     window.onload = function() {
 
        var game = new Phaser.Game("102", "102", Phaser.SHOW_ALL, 'gameContainer');
-       //var game = new Phaser.Game(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio, Phaser.SHOW_ALL, 'gameContainer');
         game.state.add('Boot', LanguageGame.Boot);
         game.state.add('Preloader',LanguageGame.Preloader);
         game.state.add('Title',LanguageGame.Title);
         game.state.add('MainMenu',LanguageGame.MainMenu);
-       // game.state.add('NinjaTitle',LanguageGame.NinjaTitle);
         game.state.add('Ninja',LanguageGame.Ninja);
         game.state.add('Wordaga',LanguageGame.Wordaga);
         game.state.add('Conveyor',LanguageGame.Conveyor);

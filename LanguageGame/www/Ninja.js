@@ -9,17 +9,14 @@ LanguageGame.Ninja = function (game) {
     //this.boxWordText;
     this.boxText;
     this.numCards;
-    this.ninjaDB;
 };
 
 LanguageGame.Ninja.prototype = {
     create: function () {
-        this.ninjaDB = new SQL.Database();
+
         this.numCards = 0;
 
-        this.populateDatabase(this);
-
-        var results = this.ninjaDB.exec("SELECT english, unicode FROM test T WHERE T.category like '%number%'");
+        var results = LanguageGame.gameDB.exec("SELECT english, unicode FROM test T WHERE T.category like '%number%'");
         var randNumber = Math.floor(Math.random() * 9);
         var boxWordText = results[0]["values"][randNumber][0];
         var unicodeVal = results[0]["values"][randNumber][1];
@@ -46,21 +43,6 @@ LanguageGame.Ninja.prototype = {
         }
 
     },
-
-    populateDatabase: function(game) {
-        this.ninjaDB.run("CREATE TABLE test( wid INT PRIMARY KEY, english TEXT, category TEXT, unicode INT)");
-        this.ninjaDB.run("INSERT INTO test VALUES (1, 'one', 'numbers', 19968)");
-        this.ninjaDB.run("INSERT INTO test VALUES (2, 'two', 'numbers', 20108)");
-        this.ninjaDB.run("INSERT INTO test VALUES (3, 'three', 'numbers', 19977)");
-        this.ninjaDB.run("INSERT INTO test VALUES (4, 'four', 'numbers', 22235)");
-        this.ninjaDB.run("INSERT INTO test VALUES (5, 'five', 'numbers', 20116)");
-        this.ninjaDB.run("INSERT INTO test VALUES (6, 'six', 'numbers', 20845)");
-        this.ninjaDB.run("INSERT INTO test VALUES (7, 'seven', 'numbers', 19971)");
-        this.ninjaDB.run("INSERT INTO test VALUES (8, 'eight', 'numbers', 20843)");
-        this.ninjaDB.run("INSERT INTO test VALUES (9, 'nine', 'numbers', 20061)");
-        this.ninjaDB.run("INSERT INTO test VALUES (10, 'ten', 'numbers', 21313)");
-    },
-
 
     stopCard: function (pointer, card,tween) {
         tween.stop(true);
