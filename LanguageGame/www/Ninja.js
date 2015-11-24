@@ -5,6 +5,7 @@ LanguageGame.Ninja = function (game) {
     this.wordBox = null;
     this.backBox = null;
     this.livesBox = null;
+    this.scoresBox = null;
     this.backText = "";
     this.backWordText = "";
     this.boxText = "";
@@ -14,11 +15,14 @@ LanguageGame.Ninja = function (game) {
     this.cardArray = [];
     this.category = "";
     this.lives = 0;
+    this.score = 0;
+    this.style = "";
+    this.goodCardIdx = 0;
 };
 
 LanguageGame.Ninja.prototype = {
     create: function () {
-        var style = {font: "50px Georgia", fill: "000000", align: "center"};
+        this.style = {font: "50px Georgia", fill: "000000", align: "center"};
 
         //------- select the category for the round ------------//
         this.results = LanguageGame.gameDB.exec("SELECT DISTINCT category FROM test");
@@ -40,7 +44,7 @@ LanguageGame.Ninja.prototype = {
         //--------------------- Create Back Button -----------------//
         this.backBox = this.add.image(0, this.game.height - 60, 'box');
         this.backWordText = "Back";
-        this.backText = this.game.add.text(this.backBox.width / 2, this.backBox.height / 2 - 35, this.backWordText, style);
+        this.backText = this.game.add.text(this.backBox.width / 2, this.backBox.height / 2 - 35, this.backWordText, this.style);
         this.backText.anchor.set(0.5);
         this.backBox.addChild(this.backText);
         this.backBox.inputEnabled = true; //now we can accept clicks/touches
@@ -49,43 +53,43 @@ LanguageGame.Ninja.prototype = {
 
         //------------- count for player lives to be displayed -----//
         this.lives = 3;
-        this.livesBox = this.add.image(this.world.width - 200, 10, 'box');
-        var lifeText = this.game.add.text(this.livesBox.width / 2, this.livesBox.height / 2 - 35, this.lives, style);
-        lifeText.anchor.set(0.5);
-        this.livesBox.addChild(lifeText);
-
+        this.setLivesBox();
         //---------------------------------------------//
-
+        this.setScoreBox();
         //------------ Make Starting Cards -----------//
+        this.goodCardIdx = Math.floor(Math.random()*3);
         for (var i = 0; i < 3; i++) {
-            this.aNewCard();
+            this.aNewCard(this.goodCardIdx,i);
         }
         console.log(this.numCards);
         //------------------------------//
     },
 
-    stopCard: function (pointer, card, tween, bool) {
+    stopCard: function (pointer, game, card, tween, bool) {
         //var child = new Phaser.TweenData(tween);
         //var c = child.parent;
-        console.log(bool);
-        if (bool == "true") {
-            this.lives++;
+        console.log(card);
+        if (bool == true) {
+            this.score+= 1000;
             //increment score
         }else{
             this.lives--;
+            this.setLivesBox();
             //portray decremented lives and check for death
         }
+        card.kill();
         tween.stop(true);
 
         if(this.numCards==0) {
+            this.goodCardIdx = Math.floor(Math.random()*3)
             for (var i = 0; i < 3; i++) {
-                this.aNewCard();
+                this.aNewCard(this.goodCardIdx, i);
             }
         }
 
     },
 
-    aNewCard: function (game) {
+    aNewCard: function (goodCardIdx, i, game) {
         this.numCards++;
 
         var catLen = this.results[0]["values"].length;
@@ -101,7 +105,7 @@ LanguageGame.Ninja.prototype = {
         card.goodCard = "false";
 
         //--------------------------------------------//
-        if (this.goodCard < 1) {
+        if (goodCardIdx == i) {
             card.goodCard = "true";
             this.goodCard++;
         }
@@ -141,7 +145,7 @@ LanguageGame.Ninja.prototype = {
 
         card.inputEnabled = true;
         cardText.inputEnabled = true;
-        card.events.onInputDown.addOnce(this.stopCard, this, this.card, tween, card.goodCard); //will happen when input happens
+        card.events.onInputDown.addOnce(this.stopCard, this, card, tween, card.goodCard); //will happen when input happens
 
         tween.delay(1000 * this.numCards);
         tween.start();
@@ -155,6 +159,8 @@ LanguageGame.Ninja.prototype = {
         this.ninjaBG = null;
         this.wordBox = null;
         this.backBox = null;
+        this.livesBox = null;
+        this.scoresBox = null;
         this.backText = "";
         this.backWordText = "";
         this.boxText = "";
@@ -164,12 +170,29 @@ LanguageGame.Ninja.prototype = {
         this.cardArray = [];
         this.category = "";
         this.lives = 0;
+        this.score = 0;
+        this.style = "";
     },
 
     back: function (pointer) {
         this.clear();
         this.state.start('MainMenu');
     },
+
+    setLivesBox: function() {
+        this.livesBox = this.add.image(this.world.width - 200, 10, 'box');
+        var lifeText = this.game.add.text(this.livesBox.width / 2, this.livesBox.height / 2 - 35, this.lives, this.style);
+        lifeText.anchor.set(0.5);
+        this.livesBox.addChild(lifeText);
+    },
+
+    setScoreBox: function() {
+        this.scoreBox = this.add.image(200, 10, 'box');
+        var scoreText = this.game.add.text(this.scoreBox.width / 2, this.scoreBox.height / 2 - 35, this.score, this.style);
+        scoreText.anchor.set(0.5);
+        this.scoreBox.addChild(scoreText);
+    },
+
 
     update : function(){
         for(var i = 0; i < this.cardArray.length;i++)
@@ -180,6 +203,7 @@ LanguageGame.Ninja.prototype = {
                 if (this.cardArray[i].goodCard == "true") {
                     this.goodCard--;
                     this.lives--;
+                    this.setLivesBox();
                 }
 
                 this.cardArray[i].kill();
@@ -191,15 +215,16 @@ LanguageGame.Ninja.prototype = {
 
         if(this.numCards == 0)
         {
+            this.goodCardIdx = Math.floor(Math.random()*3)
             for (var i = 0; i < 3; i++) {
-                this.aNewCard();
+                this.aNewCard(this.goodCardIdx, i);
             }
         }
 
     if(this.lives <=0) {
         alert("GAME OVER");
         this.clear();
-        this.create();
+        this.state.start("Ninja");
     }
     }
 
