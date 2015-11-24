@@ -6,6 +6,7 @@ LanguageGame.Conveyor = function (game) {
     this.lives = 3;
     this.goodCard = 0;
     this.score = 0;
+    this.multiplier = 1;
 
     this.card = null;
     this.style = null;
@@ -38,16 +39,14 @@ LanguageGame.Conveyor.prototype = {
 
     },
 
-    stopCard: function (pointer, card, tween, bool) {
-        console.log(bool);
+    stopCard: function (pointer, game, card, tween, bool) {
         this.numCards--;
         if (bool == "true") {
             this.lives--;
             //portray decremented lives and check for death
-        } else {
-            this.score += 100;
         }
         tween.stop(true);
+        card.kill();
 
     },
 
@@ -130,7 +129,6 @@ LanguageGame.Conveyor.prototype = {
     },
 
     buildWordBox: function (i) {
-        console.log(i);
         this.wordBox = null;
         this.wordBox = this.add.image(this.world.centerX - 100, this.game.height - 60, 'box');
         var boxText = this.game.add.text(this.wordBox.width / 2, this.card.height / 8 + 10, this.cardArray[i].engText, this.style);
@@ -173,11 +171,11 @@ LanguageGame.Conveyor.prototype = {
                 y: [y1 + (i * (this.card.height + 5))]
             }, 7500);
 
-            var tweenFin = this.add.tween(this.cardArray[i]).to({x: [-800], y: [-500]}, 1);
-            this.tweenArray[i].chain(tweenFin);
+            //var tweenFin = this.add.tween(this.cardArray[i]).to({x: [-800], y: [-500]}, 1);
+            //this.tweenArray[i].chain(tweenFin);
            // this.tweenArray[i].repeat(Infinity);
             this.cardArray[i].inputEnabled = true;
-            this.cardArray[i].events.onInputDown.addOnce(this.stopCard, this, this.cardArray[i], this.tweenArray[i], this.cardArray[i].goodCard); //will happen when input happens
+            this.cardArray[i].events.onInputDown.addOnce(this.stopCard, this, this.game, this.cardArray[i], this.tweenArray[i], this.cardArray[i].goodCard); //will happen when input happens
 
             //juvenile random delay computation
             this.tweenArray[i].delay((3000 * Math.random()) + 500);
@@ -204,9 +202,11 @@ LanguageGame.Conveyor.prototype = {
 
     clear: function(){
         this.points = 0;
+        this.lives = 3;
         this.goodCard = 0;
         this.score = 0;
-        this.lives = 3;
+        this.multiplier = 1;
+
         this.card = null;
         this.style = null;
         this.gameBG = null;
@@ -219,6 +219,7 @@ LanguageGame.Conveyor.prototype = {
 
         this.cardArray = [];
         this.tweenArray = [];
+        this.numCards = 0;
     },
 
     back: function (pointer) {
@@ -234,17 +235,24 @@ LanguageGame.Conveyor.prototype = {
             if( this.cardArray[i]!= null&&this.cardArray[i].x > 800) {
                 if (this.cardArray[i].goodCard == "true") {
                     this.goodCard--;
-                    this.score+=200;
+                    this.score+= (100*this.multiplier);
+                    this.multiplier++;
+                }else{
+                    this.multiplier = 1;
+                    this.lives--;
                 }
 
                 this.cardArray[i].kill();
                 this.cardArray[i] = null;
                 this.numCards--;
             }
+
         }
 
+       // if(this.numCards==0||(this.cardArray[0]!=null&&this.cardArray[0].x > 500)){
         if(this.numCards==0){
-            this.create();
+            this.buildCards();
+            this.tweenCard();
         }
 
         if(this.lives==0){
