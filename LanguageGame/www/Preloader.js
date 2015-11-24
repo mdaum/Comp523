@@ -20,6 +20,8 @@ LanguageGame.Preloader.prototype = {
         this.load.image('box','assets/images/box.png'); // "button" place holder
         this.load.image('stars','assets/images/Stars.png'); //wordaga background
         this.load.image('belt','assets/images/Conveyor.png');
+        this.load.image('back', 'assets/images/back_arrow.png');//back button
+        this.load.image('help', 'assets/images/question.png');//help button
 
     },
 

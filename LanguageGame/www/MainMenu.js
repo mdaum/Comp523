@@ -2,15 +2,16 @@
  * Created by mdaum on 10/12/2015.
  */
 LanguageGame.MainMenu=function(game){
-  this.game1;
-    this.game2;
-    this.game3;
-    this.selectionPrompt;
-    this.mainBG;
-    this.cardText1;
-    this.cardText2;
-    this.cardText3;
-    this.style
+    this.game1 = null;
+    this.game2 = null;
+    this.game3 = null;
+    this.selectionPrompt = null;
+    this.mainBG = null;
+    this.cardText1 = null;
+    this.cardText2 = null;
+    this.cardText3 = null;
+    this.style = null;
+    this.help = null;
 };
 LanguageGame.MainMenu.prototype={
   create:function(){
@@ -59,6 +60,8 @@ LanguageGame.MainMenu.prototype={
       this.game3.events.onInputDown.addOnce(this.startConveyor,this);
 
       this.selectionPrompt=this.add.bitmapText(this.world.centerX-150, this.world.centerY+300, 'eightbitwonder', 'Choose a Game', 24);
+
+
   },
     startNinja:function(pointer){
         this.state.start('Ninja');

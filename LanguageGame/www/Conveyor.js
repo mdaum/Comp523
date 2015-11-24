@@ -51,26 +51,21 @@ LanguageGame.Conveyor.prototype = {
     },
 
     buildBackBox: function () {
-        this.backBox = this.add.image(this.world.centerX - 305, this.game.height - 60, 'box');
-        var backWordText = "Back";
-        var backText = this.game.add.text(this.backBox.width / 2, this.backBox.height / 2 - 35, backWordText, this.style);
-        backText.anchor.set(0.5);
-        this.backBox.addChild(backText);
-
+        this.backBox = this.add.image(this.world.centerX - 250, this.game.height - 100, 'back');
         this.backBox.inputEnabled = true; //now we can accept clicks/touches
         this.backBox.events.onInputDown.addOnce(this.back, this); //will happen when input happens
 
     },
 
     buildLivesCounter: function () {
-        this.livesBox = this.add.image(this.world.centerX + this.backBox.width - 75, this.game.height - 60, 'box');
-        var lifeText = this.game.add.text(this.livesBox.width / 2, this.livesBox.height / 2 - 35, this.lives, this.style);
-        lifeText.anchor.set(0.5);
-        this.livesBox.addChild(lifeText);
+        this.livesBox = this.add.image(this.game.width+100, this.game.height + 600, 'box');
+        //var lifeText = this.game.add.text(this.livesBox.width / 2, this.livesBox.height / 2 - 35, this.lives, this.style);
+        //lifeText.anchor.set(0.5);
+        //this.livesBox.addChild(lifeText);
     },
 
     buildScoreBox: function () {
-        this.scoreBox = this.add.image(this.world.centerX - 100, this.game.height - this.backBox.height + 5, 'box');
+        this.scoreBox = this.add.image(this.world.centerX - 100, this.game.height - this.livesBox.height + 5, 'box');
         var scoreText = this.game.add.text(this.livesBox.width / 2, this.livesBox.height / 2 - 35, this.score, this.style);
         scoreText.anchor.set(0.5);
         this.scoreBox.addChild(scoreText);
@@ -186,7 +181,7 @@ LanguageGame.Conveyor.prototype = {
 
     updateScore: function () {
         this.scoreBox = null;
-        this.scoreBox = this.add.image(this.world.centerX - 100, this.game.height - this.backBox.height + 5, 'box');
+        this.scoreBox = this.add.image(this.world.centerX - 100, this.game.height - this.livesBox.height + 5, 'box');
         var scoreText = this.game.add.text(this.livesBox.width / 2, this.livesBox.height / 2 - 35, this.score, this.style);
         scoreText.anchor.set(0.5);
         this.scoreBox.addChild(scoreText);
@@ -194,7 +189,7 @@ LanguageGame.Conveyor.prototype = {
 
     updateLives: function () {
         this.livesBox = null;
-        this.livesBox = this.add.image(this.world.centerX + this.backBox.width - 75, this.game.height - 60, 'box');
+        this.livesBox = this.add.image(this.world.centerX + 100, this.game.height - 60, 'box');
         var lifeText = this.game.add.text(this.livesBox.width / 2, this.livesBox.height / 2 - 35, this.lives, this.style);
         lifeText.anchor.set(0.5);
         this.livesBox.addChild(lifeText);

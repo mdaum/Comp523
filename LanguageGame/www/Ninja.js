@@ -43,13 +43,10 @@ LanguageGame.Ninja.prototype = {
         //------------------------------------------------------//
 
         //--------------------- Create Back Button -----------------//
-        this.backBox = this.add.image(0, this.game.height - 60, 'box');
-        this.backWordText = "Back";
-        this.backText = this.game.add.text(this.backBox.width / 2, this.backBox.height / 2 - 35, this.backWordText, this.style);
-        this.backText.anchor.set(0.5);
-        this.backBox.addChild(this.backText);
+        this.backBox = this.add.image(this.world.centerX - 250, this.game.height - 100, 'back');
         this.backBox.inputEnabled = true; //now we can accept clicks/touches
         this.backBox.events.onInputDown.addOnce(this.back, this); //will happen when input happens
+
         //------------ end back button ---------------------------//
 
         //------------- count for player lives to be displayed -----//
