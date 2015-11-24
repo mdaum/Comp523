@@ -20,7 +20,7 @@ LanguageGame.MainMenu.prototype={
 
       //card text for Ninja Game
       this.style={font: "30px Georgia",fill:"000000",align:"center"};
-      this.cardText1=this.game.add.text(138/2,180/2,"Ninja",this.style);
+      this.cardText1=this.game.add.text(138/2,180/2,"Card\nNinja",this.style);
       this.cardText1.anchor.set(0.5);
       this.cardText1.x = Math.floor(game1.x + 138/2);
       this.cardText1.y= Math.floor(game1.y+180/2);
