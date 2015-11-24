@@ -205,6 +205,8 @@ LanguageGame.Conveyor.prototype = {
     clear: function(){
         this.points = 0;
         this.goodCard = 0;
+        this.score = 0;
+        this.lives = 3;
         this.card = null;
         this.style = null;
         this.gameBG = null;
@@ -242,13 +244,13 @@ LanguageGame.Conveyor.prototype = {
         }
 
         if(this.numCards==0){
-            this.clear();
             this.create();
         }
 
         if(this.lives==0){
             alert("Game Over, Sorry");
-            this.lives=3;
+            this.clear()
+            this.create();
         }
     }
 
