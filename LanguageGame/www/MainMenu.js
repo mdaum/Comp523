@@ -16,6 +16,12 @@ LanguageGame.MainMenu=function(game){
 LanguageGame.MainMenu.prototype={
   create:function(){
       this.mainBG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'bg');
+
+      this.help = this.add.image(this.world.centerX - 225,this.game.height-50, 'help');
+      this.help.anchor.set(0.5);
+      this.help.inputEnabled = true;
+      this.help.events.onInputDown.addOnce(this.startHelp, this);
+
     //game1=this.add.image(this.world.centerX-80,this.world.centerY+100,'ninjaselect'); //wordninja
      this.game1=this.add.image(this.world.centerX-80,this.world.centerY+100,'card'); //wordninja
 
@@ -61,8 +67,11 @@ LanguageGame.MainMenu.prototype={
 
       this.selectionPrompt=this.add.bitmapText(this.world.centerX-150, this.world.centerY+300, 'eightbitwonder', 'Choose a Game', 24);
 
-
   },
+    startHelp: function(pointer){
+        this.state.start('HowTo');
+    },
+
     startNinja:function(pointer){
         this.state.start('Ninja');
     },

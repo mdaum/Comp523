@@ -22,7 +22,7 @@ LanguageGame.Preloader.prototype = {
         this.load.image('belt','assets/images/Conveyor.png');
         this.load.image('back', 'assets/images/back_arrow.png');//back button
         this.load.image('help', 'assets/images/question.png');//help button
-
+        this.load.image('sword','assets/images/katana.png');
     },
 
     create : function() {

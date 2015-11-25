@@ -43,6 +43,7 @@ LanguageGame.Conveyor.prototype = {
         this.numCards--;
         if (bool == "true") {
             this.lives--;
+            this.multiplier = 1;
             //portray decremented lives and check for death
         }
         tween.stop(true);
@@ -166,9 +167,6 @@ LanguageGame.Conveyor.prototype = {
                 y: [y1 + (i * (this.card.height + 5))]
             }, 7500);
 
-            //var tweenFin = this.add.tween(this.cardArray[i]).to({x: [-800], y: [-500]}, 1);
-            //this.tweenArray[i].chain(tweenFin);
-           // this.tweenArray[i].repeat(Infinity);
             this.cardArray[i].inputEnabled = true;
             this.cardArray[i].events.onInputDown.addOnce(this.stopCard, this, this.game, this.cardArray[i], this.tweenArray[i], this.cardArray[i].goodCard); //will happen when input happens
 

@@ -53,7 +53,7 @@ LanguageGame.Ninja.prototype = {
         this.lives = 3;
         this.setLivesBox();
         //---------------------------------------------//
-        this.setScoreBox();
+        this.setScoreBox();i
         //------------ Make Starting Cards -----------//
         this.goodCardIdx = Math.floor(Math.random()*3);
         for (var i = 0; i < 3; i++) {
@@ -188,9 +188,13 @@ LanguageGame.Ninja.prototype = {
     setLivesBox: function() {
         this.livesBox = null;
         this.livesBox = this.add.image(this.world.width - 200, 10, 'box');
-        var lifeText = this.game.add.text(this.livesBox.width / 2, this.livesBox.height / 2 - 35, this.lives, this.style);
-        lifeText.anchor.set(0.5);
-        this.livesBox.addChild(lifeText);
+
+        //var lifeText = this.game.add.text(this.livesBox.width / 2, this.livesBox.height / 2 - 35, this.lives, this.style);
+        //lifeText.anchor.set(0.5);
+        for(var i = this.lives; i > 0;i--){
+            var life = this.add.image(0+(30*i), 0, 'sword');
+          //  life.anchor.set(0.5);
+            this.livesBox.addChild(life);}
     },
 
     setScoreBox: function() {

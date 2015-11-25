@@ -15,6 +15,7 @@
    <script src="Ninja.js"></script>
     <script src="Wordaga.js"></script>
     <script src="Conveyor.js"></script>
+    <script src="HowTo.js"></script>
 
 
     <script type="text/javascript"src="cordova.js"></script><!--Just comment this out when you want to run w/o cordova-->
@@ -49,6 +50,7 @@
        var game = new Phaser.Game("102", "102", Phaser.SHOW_ALL, 'gameContainer');
         game.state.add('Boot', LanguageGame.Boot);
         game.state.add('Preloader',LanguageGame.Preloader);
+        game.state.add('HowTo', LanguageGame.HowTo);
         game.state.add('Title',LanguageGame.Title);
         game.state.add('MainMenu',LanguageGame.MainMenu);
         game.state.add('Ninja',LanguageGame.Ninja);
