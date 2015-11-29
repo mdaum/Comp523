@@ -1,7 +1,7 @@
 /**
  * Created by mdaum on 10/12/2015.
  */
-
+var isAndroid=window.navigator.platform.toLowerCase().indexOf("win")==-1&&window.navigator.platform.toLowerCase().indexOf("mac")==-1;
 var LanguageGame = {
     gameDB : null //database for the game
 };
@@ -13,7 +13,7 @@ LanguageGame.Boot=function(game){
 
 
     var xhr = new XMLHttpRequest();
-    if(window.navigator.platform.toLowerCase().indexOf("win")==-1&&window.navigator.platform.toLowerCase().indexOf("mac")==-1){
+    if(isAndroid){
         xhr.open('GET','file:///android_asset/www/databases/test.db'); //android version
     }
     else{

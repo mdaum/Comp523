@@ -7,9 +7,12 @@ LanguageGame.Title=function(game){
     this.startBG2;
     this.startBG3;
     this.startPrompt;
+    this.welcome=null;
 };
 LanguageGame.Title.prototype={
   create: function() {
+      if(!isAndroid)this.welcome=this.add.audio('welcome');
+      else this.welcome=new Media(getMediaURL('assets/audio/welcomeSound.mp3'),null,mediaError);
       startBG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'bg');//sky in left hand corner
       startBG2 = this.add.image(this.world.centerX - 120, this.world.centerY - 220, 'titleimage'); //ripped off
       startBG3 = this.add.image(this.world.centerX + 120, this.world.centerY+100, 'building');
@@ -19,6 +22,7 @@ LanguageGame.Title.prototype={
       startPrompt=this.add.bitmapText(this.world.centerX-150, this.world.centerY+250,'eightbitwonder','Touch to Start', 24);
   },
     nextScreen: function(pointer){
+     this.welcome.play();
      this.state.start('MainMenu');
     }
 };

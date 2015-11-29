@@ -19,10 +19,22 @@ LanguageGame.Ninja = function (game) {
     this.style = "";
     this.goodCardIdx = 0;
     this.multiplier = 1;
+    this.gameOver=null;
+    this.woops=null;
+    this.yea=null;
 };
 
 LanguageGame.Ninja.prototype = {
     create: function () {
+        if(!isAndroid){
+            this.gameOver=this.add.audio('gameOver');
+            this.woops=this.add.audio('woops');
+            this.yea=this.add.audio('yea');
+        }else{
+            this.gameOver=new Media(getMediaURL('assets/audio/gameOver.mp3'),null,mediaError);
+            this.woops=new Media(getMediaURL('assets/audio/youSuck.mp3'),null,mediaError);
+            this.yea=new Media(getMediaURL('assets/audio/yea.mp3'),null,mediaError);
+        }
         this.style = {font: "50px Georgia", fill: "000000", align: "center"};
 
         //------- select the category for the round ------------//
@@ -53,7 +65,7 @@ LanguageGame.Ninja.prototype = {
         this.lives = 3;
         this.setLivesBox();
         //---------------------------------------------//
-        this.setScoreBox();i
+        this.setScoreBox();
         //------------ Make Starting Cards -----------//
         this.goodCardIdx = Math.floor(Math.random()*3);
         for (var i = 0; i < 3; i++) {
@@ -70,12 +82,14 @@ LanguageGame.Ninja.prototype = {
         if (bool == "true") {
             this.score+= 100*this.multiplier;
             this.multiplier++;
+           this.yea.play();
             console.log("multiplier is " + this.multiplier);
 
             //increment score
         }else{
             this.lives--;
             this.multiplier = 1;
+            this.woops.play();
             console.log("multiplier is " + this.multiplier);
             this.setLivesBox();
             //portray decremented lives and check for death
@@ -239,7 +253,8 @@ LanguageGame.Ninja.prototype = {
         }
 
     if(this.lives <=0) {
-        alert("GAME OVER");
+        this.gameOver.play();
+
         this.lives = 3;
         this.clear();
         this.state.start("Ninja");

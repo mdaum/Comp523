@@ -1,8 +1,18 @@
+
 LanguageGame.Preloader = function(game) {
     this.preloadBar = null;
     this.titleText=null;
     this.ready = false;
+    this.loaded=null;
 };
+function getMediaURL(s) {
+    if(isAndroid) return "/android_asset/www/" + s;
+    return s;
+}
+function mediaError(e) {
+    alert('Media Error');
+    alert(JSON.stringify(e));
+}
 
 LanguageGame.Preloader.prototype = {
 
@@ -22,7 +32,13 @@ LanguageGame.Preloader.prototype = {
         this.load.image('belt','assets/images/Conveyor.png');
         this.load.image('back', 'assets/images/back_arrow.png');//back button
         this.load.image('help', 'assets/images/question.png');//help button
-        this.load.image('sword','assets/images/katana.png');
+        this.load.image('sword','assets/images/katana.png')
+        if(!isAndroid) { //we use regular phaser sounds
+            this.load.audio('welcome', getMediaURL('assets/audio/welcomeSound.mp3'));
+            this.load.audio('woops',getMediaURL('assets/audio/youSuck.mp3'));
+            this.load.audio('yea',getMediaURL('assets/audio/yea.mp3'));
+            this.load.audio('gameOver',getMediaURL('assets/audio/gameOver.mp3'));
+        }
     },
 
     create : function() {

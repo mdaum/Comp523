@@ -12,9 +12,11 @@ LanguageGame.MainMenu=function(game){
     this.cardText3 = null;
     this.style = null;
     this.help = null;
+
 };
 LanguageGame.MainMenu.prototype={
   create:function(){
+
       this.mainBG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'bg');
 
       this.help = this.add.image(this.world.centerX - 225,this.game.height-50, 'help');
