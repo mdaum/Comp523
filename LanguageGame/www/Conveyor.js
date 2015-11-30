@@ -60,9 +60,6 @@ LanguageGame.Conveyor.prototype = {
 
     buildLivesCounter: function () {
         this.livesBox = this.add.image(this.game.width+100, this.game.height + 600, 'box');
-        //var lifeText = this.game.add.text(this.livesBox.width / 2, this.livesBox.height / 2 - 35, this.lives, this.style);
-        //lifeText.anchor.set(0.5);
-        //this.livesBox.addChild(lifeText);
     },
 
     buildScoreBox: function () {

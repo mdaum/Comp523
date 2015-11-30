@@ -82,7 +82,7 @@ LanguageGame.Ninja.prototype = {
         if (bool == "true") {
             this.score+= 100*this.multiplier;
             this.multiplier++;
-           this.yea.play();
+            this.yea.play();
             console.log("multiplier is " + this.multiplier);
 
             //increment score
