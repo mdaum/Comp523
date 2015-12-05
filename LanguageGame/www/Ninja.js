@@ -22,6 +22,9 @@ LanguageGame.Ninja = function (game) {
     this.gameOver=null;
     this.woops=null;
     this.yea=null;
+    this.card1Unicode = "";
+    this.card2Unicode = "";
+    this.card3Unicode = "";
 };
 
 LanguageGame.Ninja.prototype = {
@@ -107,67 +110,78 @@ LanguageGame.Ninja.prototype = {
     },
 
     aNewCard: function (goodCardIdx, i, game) {
-        this.numCards++;
+
 
         var catLen = this.results[0]["values"].length;
         var randNumber = Math.floor(Math.random() * catLen);
         var boxWordText = this.results[0]["values"][randNumber][0];
         var unicodeVal = this.results[0]["values"][randNumber][1];
 
-        var cardStyle = {font: "60px Serif", fill: "000000", align: "center"};
-        var card = this.add.image(0, this.game.height, 'card');
-        var cardText = this.game.add.text(card.width / 2, card.height / 2, String.fromCharCode(unicodeVal), cardStyle);
-        cardText.anchor.set(0.5);
-        card.addChild(cardText);
-        card.goodCard = "false";
-
-        //--------------------------------------------//
-        if (goodCardIdx == i) {
-            card.goodCard = "true";
-            this.goodCard++;
+        while(unicodeVal == this.card1Unicode || unicodeVal == this.card2Unicode || unicodeVal == this.card3Unicode)
+        {
+            randNumber = Math.floor(Math.random() * catLen);
+            boxWordText = this.results[0]["values"][randNumber][0];
+            unicodeVal = this.results[0]["values"][randNumber][1];
         }
-        //--------------------------------------------//
+            this.numCards++;
+            this.card1Unicode = (i == 0) ? unicodeVal : this.card1Unicode;
+            this.card2Unicode = (i == 1) ? unicodeVal : this.card2Unicode;
+            this.card3Unicode = (i == 2) ? unicodeVal : this.card3Unicode;
 
-        var style = {font: "50px Georgia", fill: "000000", align: "center"};
+            var cardStyle = {font: "60px Serif", fill: "000000", align: "center"};
+            var card = this.add.image(0, this.game.height, 'card');
+            var cardText = this.game.add.text(card.width / 2, card.height / 2, String.fromCharCode(unicodeVal), cardStyle);
+            cardText.anchor.set(0.5);
+            card.addChild(cardText);
+            card.goodCard = "false";
+
+            //--------------------------------------------//
+            if (goodCardIdx == i) {
+                card.goodCard = "true";
+                this.goodCard++;
+            }
+            //--------------------------------------------//
+
+            var style = {font: "50px Georgia", fill: "000000", align: "center"};
 
 
-        if (card.goodCard == "true") {
+            if (card.goodCard == "true") {
 
-            var newBoxText = this.game.add.text(this.wordBox.width / 2, this.card.height / 8 + 10, boxWordText, style);
-            newBoxText.anchor.set(0.5);
-            this.wordBox.removeChild(this.boxText);
-            this.wordBox.addChild(newBoxText);
-            this.boxText = newBoxText;
-        }
+                var newBoxText = this.game.add.text(this.wordBox.width / 2, this.card.height / 8 + 10, boxWordText, style);
+                newBoxText.anchor.set(0.5);
+                this.wordBox.removeChild(this.boxText);
+                this.wordBox.addChild(newBoxText);
+                this.boxText = newBoxText;
+            }
 
 
-        var x1 = 4;
-        var x2 = 100;
-        var x3 = 136;
-        var x4 = 300;
-        var x5 = 438;
-        var x6 = 500;
+            var x1 = 4;
+            var x2 = 100;
+            var x3 = 136;
+            var x4 = 300;
+            var x5 = 438;
+            var x6 = 500;
 
-        var tween = this.add.tween(card).to({
-            x: [x1, x2, x3, x4, x5, x6],
-            y: [483, 0, 50, 0, 383, 900]
-        }, 5000);
+            var tween = this.add.tween(card).to({
+                x: [x1, x2, x3, x4, x5, x6],
+                y: [483, 0, 50, 0, 383, 900]
+            }, 5000);
 
-        tween.interpolation(function (v, k) {
-            return Phaser.Math.bezierInterpolation(v, k);
-        });
+            tween.interpolation(function (v, k) {
+                return Phaser.Math.bezierInterpolation(v, k);
+            });
 
-        //var tween2 = this.game.add.tween(card).to({x: card.x, y: this.game.height + 500}, 1);
-        //tween.chain(tween2);
+            //var tween2 = this.game.add.tween(card).to({x: card.x, y: this.game.height + 500}, 1);
+            //tween.chain(tween2);
 
-        card.inputEnabled = true;
-        cardText.inputEnabled = true;
-        card.events.onInputDown.addOnce(this.stopCard,this, this.game, card, tween, card.goodCard); //will happen when input happens
+            card.inputEnabled = true;
+            cardText.inputEnabled = true;
+            card.events.onInputDown.addOnce(this.stopCard, this, this.game, card, tween, card.goodCard); //will happen when input happens
 
-        tween.delay(1000 * this.numCards);
-        tween.start();
+            tween.delay(1000 * this.numCards);
+            tween.start();
 
-        this.cardArray[this.numCards-1] = card;
+            this.cardArray[this.numCards - 1] = card;
     },
 
     clear: function(){
