@@ -159,9 +159,9 @@ LanguageGame.Ninja.prototype = {
         }
     },
     repopulateSounds:function(){
-        this.gameOver = new Media(getMediaURL('assets/audio/gameOver.mp3'), null, mediaError);
-        this.woops = new Media(getMediaURL('assets/audio/youSuck.mp3'), null, mediaError);
-        this.yea = new Media(getMediaURL('assets/audio/yea.mp3'),null, mediaError);
+        this.gameOver = new Media(getMediaURL('assets/audio/gameOver.mp3'), null, null);
+        this.woops = new Media(getMediaURL('assets/audio/youSuck.mp3'), null, null);
+        this.yea = new Media(getMediaURL('assets/audio/yea.mp3'),null, null);
     },
     //-------------------------  UTILITY FUNCTIONS -------------------------//
     //The following functions provide utilities that are used in create() and update()
