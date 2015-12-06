@@ -228,17 +228,17 @@ LanguageGame.Ninja.prototype = {
 
         //Points used to interpolate a Bezier curve
         var x1 = this.getRandomIntInclusive(0,10);
-        var x2 = this.getRandomIntInclusive(0,(this.game.width*0.2));
-        var x3 = this.getRandomIntInclusive((this.game.width*0.2),(this.game.width*0.4));
-        var x4 = this.getRandomIntInclusive((this.game.width*0.4),(this.game.width*0.6));
-        var x5 = this.getRandomIntInclusive((this.game.width*0.6),(this.game.width*0.8));
-        var x6 = this.getRandomIntInclusive((this.game.width*0.8),(this.game.width));
+        var x2 = this.getRandomIntInclusive(0,(this.game.width*0.5));
+        var x3 = this.getRandomIntInclusive((this.game.width*0.2),(this.game.width*0.7));
+        var x4 = this.getRandomIntInclusive((this.game.width*0.4),(this.game.width*0.9));
+        var x5 = this.getRandomIntInclusive((this.game.width*0.5),(this.game.width*0.99));
+        var x6 = this.getRandomIntInclusive((this.game.width*0.7),(this.game.width));
 
         var y1 = this.getRandomIntInclusive((this.game.height*0.5),(this.game.height*0.9));
-        var y2 = this.getRandomIntInclusive(0,(this.game.height*.1));
-        var y3 = this.getRandomIntInclusive((this.game.height *.1),(this.game.height *0.3));
-        var y4 = this.getRandomIntInclusive(0,(this.game.height*.1));
-        var y5 = this.getRandomIntInclusive((this.game.height*0.2),(this.game.height*0.9));
+        var y2 = this.getRandomIntInclusive(0,(this.game.height*.5));
+        var y3 = this.getRandomIntInclusive((this.game.height *.01),(this.game.height *0.5));
+        var y4 = this.getRandomIntInclusive(0,(this.game.height*.5));
+        var y5 = this.getRandomIntInclusive((this.game.height*0.02),(this.game.height*0.99));
         var y6 = (this.game.height+card.height);
 
         //Create a tween with these points
