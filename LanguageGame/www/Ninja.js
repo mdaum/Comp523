@@ -147,7 +147,7 @@ LanguageGame.Ninja.prototype = {
      *  parameters:  pointer - a reference to the card object that was touched/clicked (not used, had trouble using)
      *               game - a reference to the current game
      *               card - a reference to the card object that was touched/clicked
-     *               tween - a reference to the twen attached to a card
+     *               tween - a reference to the tween attached to a card
      */
     stopCard: function (pointer, game, card, tween) {
 
