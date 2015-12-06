@@ -1,280 +1,319 @@
+/*Initialization of the Ninja object of LanguageGame.  This object represents the entire Ninja game, and its
+ * respective variables and parameters.
+ */
+
 LanguageGame.Ninja = function (game) {
-    this.points = null;
-    this.card = null;
-    this.ninjaBG = null;
-    this.wordBox = null;
-    this.backBox = null;
-    this.livesBox = null;
-    this.scoresBox = null;
-    this.backText = "";
-    this.backWordText = "";
+    this.ninjaBG = null;        //Background assets for the Ninja game
+    this.wordBox = null;        //Box containing the correct word in English
+    this.backBox = null;        //Box containing the "back arrow" to exit the Ninja game to the Main Menu
+    this.livesBox = null;       //Box containing the number of lives remaining
+    this.scoresBox = null;      //Box containing the score
     this.boxText = "";
-    this.numCards = 0;
-    this.goodCard = 0;
-    this.results = null;
-    this.cardArray = [];
-    this.category = "";
-    this.lives = 0;
-    this.score = 0;
-    this.style = "";
-    this.goodCardIdx = 0;
-    this.multiplier = 1;
-    this.gameOver=null;
-    this.woops=null;
-    this.yea=null;
-    this.card1Unicode = "";
-    this.card2Unicode = "";
-    this.card3Unicode = "";
+    this.numCards = 0;          //The number of Cards onscreen at a given instant
+    this.goodCard = 0;          //The number of cards that match with the correct answer onscreen. Should be 1 or 0 at the present time.
+    this.goodCardIdx = 0;       //The index of the correct card in cardArray
+    this.cardArray = [];        //An array to hold all the cards in the game at a given moment
+    this.category = "";         //The category for the current round (e.g. numbers, colors etc.)
+    this.lives = 0;             //The number of lives the player has remaining
+    this.score = 0;             //The current score for the player
+    this.style = "";            //The default style to be used by text in the game
+    this.multiplier = 1;        //The multiplier for score
+    this.gameOver=null;         //The sound byte asset for when the game is over
+    this.woops=null;            //The sound byte asset for when the player picks the wrong card
+    this.yea=null;              //The sound byte asset for when the player picks the correct card
+    this.card1Unicode = "";     //The unicode for the first card
+    this.card2Unicode = "";     //The unicode for the second card
+    this.card3Unicode = "";     //The unicode for the third card
+    this.results = null;        //The results of the most recent database call made in the Ninja game
 };
 
+//The prototype for the Ninja object
 LanguageGame.Ninja.prototype = {
+
+    //-------------------------  TOP-LEVEL FUNCTIONS -------------------------//
+    //The following are functions used by Phaser itself while the game is running
+
+    /* Built-in function used by Phaser.  Called upon entering the Ninja game-state
+     * Initializes the Ninja game-state.
+     */
+
     create: function () {
-        if(!isAndroid){
-            this.gameOver=this.add.audio('gameOver');
-            this.woops=this.add.audio('woops');
-            this.yea=this.add.audio('yea');
-        }else{
-            this.gameOver=new Media(getMediaURL('assets/audio/gameOver.mp3'),null,mediaError);
-            this.woops=new Media(getMediaURL('assets/audio/youSuck.mp3'),null,mediaError);
-            this.yea=new Media(getMediaURL('assets/audio/yea.mp3'),null,mediaError);
+
+        //Add the sound assets appropriately based on whether we are on an Android device or on Web
+        if (!isAndroid) {
+            this.gameOver = this.add.audio('gameOver');
+            this.woops = this.add.audio('woops');
+            this.yea = this.add.audio('yea');
+        } else {
+            this.gameOver = new Media(getMediaURL('assets/audio/gameOver.mp3'), null, mediaError);
+            this.woops = new Media(getMediaURL('assets/audio/youSuck.mp3'), null, mediaError);
+            this.yea = new Media(getMediaURL('assets/audio/yea.mp3'), null, mediaError);
         }
+
+        //Set the default font style for the game, usign CSS styling
         this.style = {font: "50px Georgia", fill: "000000", align: "center"};
 
         //------- select the category for the round ------------//
+
+        //Retrieve all the categories in the DB, and select one at random
         this.results = LanguageGame.gameDB.exec("SELECT DISTINCT category FROM test");
         var len = this.results[0]["values"].length;
-        var rnd = Math.floor(Math.random()*len);
+        var rnd = Math.floor(Math.random() * len);
         this.category = this.results[0]["values"][rnd][0];
-        console.log(len);
-        console.log(rnd);
         //---------------------------------------------//
 
         //------------- initialize game state ------------//
-        this.results = LanguageGame.gameDB.exec("SELECT english, unicode FROM test T WHERE T.category like '%"+ this.category+"%'");
+
+        //Retrieve all the english,unicode pairs from the DB, and add the background and wordBox assets
+        //Note that this DB query is the only one that needs to be made in a given round
+        this.results = LanguageGame.gameDB.exec("SELECT english, unicode FROM test T WHERE T.category like '%" + this.category + "%'");
         this.ninjaBG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'dojo');
         this.wordBox = this.add.image(this.world.centerX - 100, this.game.height - 60, 'box');
-        this.card = this.add.image(-400, -400, 'card');
-        this.card.goodCard = "false";
-        //------------------------------------------------------//
 
-        //--------------------- Create Back Button -----------------//
+        //Create Back Button, and enable it to accept touch/click input and call this.back when that happens//
         this.backBox = this.add.image(this.world.centerX - 250, this.game.height - 100, 'back');
         this.backBox.inputEnabled = true; //now we can accept clicks/touches
         this.backBox.events.onInputDown.addOnce(this.back, this); //will happen when input happens
 
-        //------------ end back button ---------------------------//
-
-        //------------- count for player lives to be displayed -----//
+        //Initialize the number of player lives and livesBox//
         this.lives = 3;
         this.setLivesBox();
-        //---------------------------------------------//
+
+        //Initialize the scoreBox
         this.setScoreBox();
-        //------------ Make Starting Cards -----------//
-        this.goodCardIdx = Math.floor(Math.random()*3);
+
+        //Make the initial three starting cards, choosing one at random to be the card with the correct character
+        this.goodCardIdx = Math.floor(Math.random() * 3);
         for (var i = 0; i < 3; i++) {
-            this.aNewCard(this.goodCardIdx,i, this);
+            this.aNewCard(this.goodCardIdx, i, this);
         }
-        console.log(this.numCards);
         //------------------------------//
     },
 
-    stopCard: function (pointer, game, card, tween, bool) {
+    /* Built-in function used by Phaser.  Is called 30 times a second to update the game and its
+     * relevant parameters
+     */
 
-        tween.stop(true);
+    update: function () {
 
-        if (bool == "true") {
-            this.score+= 100*this.multiplier;
-            this.multiplier++;
-            this.yea.play();
-            console.log("multiplier is " + this.multiplier);
+        //Set lives and score boxes, in case they have changed
+        this.setLivesBox();
+        this.setScoreBox();
 
-            //increment score
-        }else{
-            this.lives--;
-            this.multiplier = 1;
-            this.woops.play();
-            console.log("multiplier is " + this.multiplier);
-            this.setLivesBox();
-            //portray decremented lives and check for death
+        //For every card...
+        for (var i = 0; i < this.cardArray.length; i++) {
+
+            //If the card is not null and out of bounds...
+            if (this.cardArray[i] != null && ( this.cardArray[i].x > this.game.width || this.cardArray[i].y > this.game.height)) {
+
+                //If the card was the correct card, player loses and life and multiplier is reset.
+                if (this.cardArray[i].goodCard == "true") {
+                    this.goodCard--;
+                    this.lives--;
+                    this.multiplier = 1;
+                }
+
+                //Kill the card, reset that cardArray location, and decrement numCards
+                this.cardArray[i].kill();
+                this.cardArray[i] = null;
+                this.numCards--;
+            }
         }
-        card.kill();
-        this.numCards--;
 
-        if(this.numCards==0) {
-            this.goodCardIdx = Math.floor(Math.random()*3)
+        //If all cards are gone, spawn the next set of 3
+        if (this.numCards == 0) {
+            this.goodCardIdx = Math.floor(Math.random() * 3)
             for (var i = 0; i < 3; i++) {
                 this.aNewCard(this.goodCardIdx, i, this);
             }
         }
 
+        //If all lives are gone, play the gameOver sound and notify the player
+        if (this.lives <= 0) {
+            this.gameOver.play();
+
+            this.lives = 3;
+            this.clear();
+            this.state.start("Ninja");
+        }
     },
 
+    //-------------------------  UTILITY FUNCTONS -------------------------//
+    //The following functions provide utilities that are used in create() and update()
+
+    /* Stops a card, adjusting all the necessary information, and then killing the card. Is called when the
+     *  onInputDown event fires on a card (See aNewCard() function).
+     *
+     *  parameters:  pointer - a reference to the card object that was touched/clicked (not used, had trouble using)
+     *               game - a reference to the current game
+     *               card - a reference to the card object that was touched/clicked
+     *               tween - a reference to the twen attached to a card
+     */
+    stopCard: function (pointer, game, card, tween) {
+
+        //Stop the card's tween
+        tween.stop(true);
+
+        //If the card was the correct card, add to the score, adjust the multiplier, and play good sound
+        if (card.goodCard == "true") {
+            this.score += 100 * this.multiplier;
+            this.multiplier++;
+            this.yea.play();
+
+        //If the card was an incorrect card, deduct a life, reset multiplier, and play bad sound
+        } else {
+            this.lives--;
+            this.setLivesBox();
+            this.multiplier = 1;
+            this.woops.play();
+        }
+
+        //Kill the card and decrement numCards
+        card.kill();
+        this.numCards--;
+    },
+
+    /*  Creates a new card
+     *  parameters: goodCardIdx - the random index the correct card should have in cardArray
+     *              i - the index in cardArray of the new card
+     *              game - a reference to the current game
+     */
     aNewCard: function (goodCardIdx, i, game) {
 
-
+        //Choose a english-unicode pair at random
         var catLen = this.results[0]["values"].length;
         var randNumber = Math.floor(Math.random() * catLen);
         var boxWordText = this.results[0]["values"][randNumber][0];
         var unicodeVal = this.results[0]["values"][randNumber][1];
 
-        while(unicodeVal == this.card1Unicode || unicodeVal == this.card2Unicode || unicodeVal == this.card3Unicode)
-        {
+        //Repeat until the chosen pair is different from any other cards pair
+        while (unicodeVal == this.card1Unicode || unicodeVal == this.card2Unicode || unicodeVal == this.card3Unicode) {
             randNumber = Math.floor(Math.random() * catLen);
             boxWordText = this.results[0]["values"][randNumber][0];
             unicodeVal = this.results[0]["values"][randNumber][1];
         }
-            this.numCards++;
-            this.card1Unicode = (i == 0) ? unicodeVal : this.card1Unicode;
-            this.card2Unicode = (i == 1) ? unicodeVal : this.card2Unicode;
-            this.card3Unicode = (i == 2) ? unicodeVal : this.card3Unicode;
 
-            var cardStyle = {font: "60px Serif", fill: "000000", align: "center"};
-            var card = this.add.image(0, this.game.height, 'card');
-            var cardText = this.game.add.text(card.width / 2, card.height / 2, String.fromCharCode(unicodeVal), cardStyle);
-            cardText.anchor.set(0.5);
-            card.addChild(cardText);
-            card.goodCard = "false";
+        //Increment the number of cards
+        this.numCards++;
 
-            //--------------------------------------------//
-            if (goodCardIdx == i) {
-                card.goodCard = "true";
-                this.goodCard++;
-            }
-            //--------------------------------------------//
+        //Set the appropriate card unicode variable
+        this.card1Unicode = (i == 0) ? unicodeVal : this.card1Unicode;
+        this.card2Unicode = (i == 1) ? unicodeVal : this.card2Unicode;
+        this.card3Unicode = (i == 2) ? unicodeVal : this.card3Unicode;
 
-            var style = {font: "50px Georgia", fill: "000000", align: "center"};
+        //Add the card to the game, set the text inside the card, and default the card to not be the correct card
+        var cardStyle = {font: "60px Serif", fill: "000000", align: "center"};
+        var card = this.add.image(0, this.game.height, 'card');
+        var cardText = this.game.add.text(card.width / 2, card.height / 2, String.fromCharCode(unicodeVal), cardStyle);
+        cardText.anchor.set(0.5);
+        card.addChild(cardText);
+        card.goodCard = "false";
 
+        //If this card was meant to be the correct card, set it to be the correct card
+        if (goodCardIdx == i) {
+            card.goodCard = "true";
+            this.goodCard++;
+        }
 
-            if (card.goodCard == "true") {
+        //If this card is the correct card, set the wordBox to have the English of the card's Chinese
+        if (card.goodCard == "true") {
+            var newBoxText = this.game.add.text(this.wordBox.width / 2, card.height / 8 + 10, boxWordText, style);
+            newBoxText.anchor.set(0.5);
+            this.wordBox.removeChild(this.boxText);
+            this.wordBox.addChild(newBoxText);
+            this.boxText = newBoxText;
+        }
 
-                var newBoxText = this.game.add.text(this.wordBox.width / 2, this.card.height / 8 + 10, boxWordText, style);
-                newBoxText.anchor.set(0.5);
-                this.wordBox.removeChild(this.boxText);
-                this.wordBox.addChild(newBoxText);
-                this.boxText = newBoxText;
-            }
+        //BEGIN TWEENING LOGIC
 
+        //Points used to interpolate a Bezier curve
+        var x1 = 4;
+        var x2 = 100;
+        var x3 = 136;
+        var x4 = 300;
+        var x5 = 438;
+        var x6 = 500;
 
-            var x1 = 4;
-            var x2 = 100;
-            var x3 = 136;
-            var x4 = 300;
-            var x5 = 438;
-            var x6 = 500;
+        var y1 = 483;
+        var y2 = 0;
+        var y3 = 50;
+        var y4 = 0;
+        var y5 = 383;
+        var y6 = 900;
 
-            var tween = this.add.tween(card).to({
-                x: [x1, x2, x3, x4, x5, x6],
-                y: [483, 0, 50, 0, 383, 900]
-            }, 5000);
+        //Create a tween with these points
+        var tween = this.add.tween(card).to({
+            x: [x1, x2, x3, x4, x5, x6],
+            y: [y1, y2, y3, y4, y5, y6]
+        }, 5000);
 
-            tween.interpolation(function (v, k) {
-                return Phaser.Math.bezierInterpolation(v, k);
-            });
+        //Interpolate a Bexier curve with the tween
+        tween.interpolation(function (v, k) {
+            return Phaser.Math.bezierInterpolation(v, k);
+        });
 
-            //var tween2 = this.game.add.tween(card).to({x: card.x, y: this.game.height + 500}, 1);
-            //tween.chain(tween2);
+        //END TWEENING LOGIC
 
-            card.inputEnabled = true;
-            cardText.inputEnabled = true;
-            card.events.onInputDown.addOnce(this.stopCard, this, this.game, card, tween, card.goodCard); //will happen when input happens
+        //Allow the card to be affected by touch/click events, and add the appropriate method to the handler
+        card.inputEnabled = true;
+        cardText.inputEnabled = true;
+        card.events.onInputDown.addOnce(this.stopCard, this, this.game, card, tween); //will happen when input happens
 
-            tween.delay(1000 * this.numCards);
-            tween.start();
+        //Start the tween with a greater delay depending on the number of cards
+        tween.delay(1000 * this.numCards);
+        tween.start();
 
-            this.cardArray[this.numCards - 1] = card;
+        //Add the card to the cardArray.
+        this.cardArray[this.numCards - 1] = card;
     },
 
-    clear: function(){
-            this.points = null;
-            this.card = null;
-            this.ninjaBG = null;
-            this.wordBox = null;
-            this.backBox = null;
-            this.livesBox = null;
-            this.scoresBox = null;
-            this.backText = "";
-            this.backWordText = "";
-            this.boxText = "";
-            this.numCards = 0;
-            this.goodCard = 0;
-            this.results = null;
-            this.cardArray = [];
-            this.category = "";
-            this.lives = 0;
-            this.score = 0;
-            this.style = "";
-            this.goodCardIdx = 0;
-            this.multiplier = 1;
-        console.log("multiplier is " + this.multiplier);
+    /* Resets all the variables in the Ninja game-state.  Necessary because it seems that restarting the Ninja game-state
+     * does NOT reset the variables associated with that state.  Therefore, this method is called right before any
+     * restarts or when leaving the Ninja game-state.
+     */
+    clear: function () {
+        this.points = null;
+        this.ninjaBG = null;
+        this.wordBox = null;
+        this.backBox = null;
+        this.livesBox = null;
+        this.scoresBox = null;
+        this.boxText = "";
+        this.numCards = 0;
+        this.goodCard = 0;
+        this.results = null;
+        this.cardArray = [];
+        this.category = "";
+        this.lives = 0;
+        this.score = 0;
+        this.style = "";
+        this.goodCardIdx = 0;
+        this.multiplier = 1;
     },
 
+    //Function to return to the MainMenu
     back: function (pointer) {
         this.clear();
         this.state.start('MainMenu');
     },
 
-    setLivesBox: function() {
-        this.livesBox = null;
+    //Function to set/reset the livesBox with the apporpiate number if lives
+    setLivesBox: function () {
         this.livesBox = this.add.image(this.world.width - 200, 10, 'box');
 
-        //var lifeText = this.game.add.text(this.livesBox.width / 2, this.livesBox.height / 2 - 35, this.lives, this.style);
-        //lifeText.anchor.set(0.5);
-        for(var i = this.lives; i > 0;i--){
-            var life = this.add.image(0+(30*i), 0, 'sword');
-          //  life.anchor.set(0.5);
-            this.livesBox.addChild(life);}
+        for (var i = this.lives; i > 0; i--) {
+            var life = this.add.image(0 + (30 * i), 0, 'sword');
+            this.livesBox.addChild(life);
+        }
     },
 
-    setScoreBox: function() {
-        this.scoreBox = null;
+    //Function to set/reset the scoreBox with the appropriate score
+    setScoreBox: function () {
         this.scoreBox = this.add.image(200, 10, 'box');
         var scoreText = this.game.add.text(this.scoreBox.width / 2, this.scoreBox.height / 2 - 35, this.score, this.style);
         scoreText.anchor.set(0.5);
         this.scoreBox.addChild(scoreText);
-    },
-
-
-    update : function(){
-        this.setLivesBox();
-        this.setScoreBox();
-
-        for(var i = 0; i < this.cardArray.length;i++)
-        {
-            if(this.cardArray[i] != null && ( this.cardArray[i].x > this.game.width || this.cardArray[i].y > this.game.height))
-            {
-
-                if (this.cardArray[i].goodCard == "true") {
-                    this.goodCard--;
-                    this.lives--;
-                    this.multiplier = 1;
-                    console.log("multiplier is " + this.multiplier);
-
-                }
-
-                this.cardArray[i].kill();
-                this.cardArray[i] = null;
-                this.numCards--;
-                console.log(this.numCards);
-            }
-        }
-
-        if(this.numCards == 0)
-        {
-            this.goodCardIdx = Math.floor(Math.random()*3)
-            for (var i = 0; i < 3; i++) {
-                this.aNewCard(this.goodCardIdx, i, this);
-            }
-        }
-
-    if(this.lives <=0) {
-        this.gameOver.play();
-
-        this.lives = 3;
-        this.clear();
-        this.state.start("Ninja");
     }
-    }
-
 };
 
 
