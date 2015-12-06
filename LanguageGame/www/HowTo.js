@@ -1,6 +1,3 @@
-/**
- * Created by sgbyers on 11/24/2015.
- */
 LanguageGame.HowTo = function (game) {
 };
 
