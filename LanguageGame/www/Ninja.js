@@ -133,8 +133,10 @@ LanguageGame.Ninja.prototype = {
             this.gameOver.play();
 
             this.lives = 3;
+            LanguageGame.score = this.score;
+            LanguageGame.multiplier = this.multiplier;
             this.clear();
-            this.state.start("Ninja");
+            this.state.start('NinjaOver');
         }
     },
 

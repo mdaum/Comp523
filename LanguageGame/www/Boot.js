@@ -3,7 +3,10 @@ var isAndroid=window.navigator.platform.toLowerCase().indexOf("win")==-1&&window
 
 //Initialization of the LanguageGame object.  This object is passed around through every other state in our game.
 var LanguageGame = {
-    gameDB : null //database for the game
+    gameDB : null, //database for the game
+    score : null,
+    multiplier: null,
+    lives : null
 };
 
 //Initialization of the Boot object of LanguageGame.  Populates gameDB.
