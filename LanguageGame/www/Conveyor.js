@@ -24,7 +24,11 @@ LanguageGame.Conveyor = function (game) {
     this.results = null;        //The results of the most recent database call made in the Ninja game
     this.category = "";         //The category for the current round (e.g. numbers, colors etc.)
 
+    this.goodCard = 0;          //The number of cards that match with the correct answer onscreen. Should be 1 or 0 at the present time.
     this.goodCardIdx = 0;
+    this.card1Unicode = "";     //The unicode for the first card
+    this.card2Unicode = "";     //The unicode for the second card
+    this.card3Unicode = "";     //The unicode for the third card
 };
 
 //The Prototype for the Conveyor Game
@@ -57,7 +61,7 @@ LanguageGame.Conveyor.prototype = {
         this.results = LanguageGame.gameDB.exec("SELECT english, unicode FROM test T WHERE T.category like '%" + this.category + "%'");
 
 
-        Math.floor(Math.random()*3); //*numcards to be random for larger sets?
+        Math.floor(Math.random() * 3); //*numcards to be random for larger sets?
 
         this.buildBackBox();
         this.buildLivesCounter();
@@ -74,13 +78,13 @@ LanguageGame.Conveyor.prototype = {
         this.updateScore();
         this.updateLives();
 
-        for(var i = 0; i < this.cardArray.length;i++){
-            if( this.cardArray[i]!= null&&this.cardArray[i].x > (this.game.width-this.card.width)) {
+        for (var i = 0; i < this.cardArray.length; i++) {
+            if (this.cardArray[i] != null && this.cardArray[i].x > (this.game.width - this.card.width)) {
                 if (this.cardArray[i].goodCard == "true") {
                     this.goodCard--;
-                    this.score+= (100*this.multiplier);
+                    this.score += (100 * this.multiplier);
                     this.multiplier++;
-                }else{
+                } else {
                     this.multiplier = 1;
                     this.lives--;
                 }
@@ -92,12 +96,12 @@ LanguageGame.Conveyor.prototype = {
 
         }
 
-        if(this.numCards==0){
+        if (this.numCards == 0) {
             this.buildCards();
             this.tweenCard();
         }
 
-        if(this.lives==0){
+        if (this.lives == 0) {
             this.lives = 3;
             LanguageGame.score = this.score;
             LanguageGame.multiplier = this.multiplier;
@@ -141,7 +145,7 @@ LanguageGame.Conveyor.prototype = {
 
     //Builds the world element that serves as the life counter
     buildLivesCounter: function () {
-        this.livesBox = this.add.image(this.game.width+100, this.game.height + 600, 'box');
+        this.livesBox = this.add.image(this.game.width + 100, this.game.height + 600, 'box');
     },
 
     //Builds the world element that serves to hold the score
@@ -154,53 +158,11 @@ LanguageGame.Conveyor.prototype = {
 
     //Generates cards for the game
     buildCards: function () {
-        // var rnd = Math.floor(Math.random() * 3);
-        var j = 0;
-        var y1 = 10;
-        var x = 0 - this.card.width;
         if (this.goodCard == 0) {
-            this.goodCard++;
-            j = Math.floor((Math.random() * 3));
+            this.goodCardIdx = Math.floor(Math.random() * 3);
         }
-
         for (var i = 0; i < 3; i++) {
-            this.cardArray[i] = this.add.image(x, y1 + (i * (this.card.height + 5)), 'card');
-            this.cardArray[i].goodCard = "false";
-            this.cardArray[i].addChild(this.getCardText(i));
-            this.numCards++;
-
-            switch (i) {
-                case 0:
-                    this.cardArray[0].engText = "Blue";
-                    break;
-                case 1:
-                    this.cardArray[1].engText = "Orange";
-                    break;
-
-                case 2:
-                    this.cardArray[2].engText = "Yellow";
-                    break;
-                default:
-                    break;
-            }
-
-        }
-        switch (j) {
-            case 0:
-                this.cardArray[0].goodCard = "true";
-                this.buildWordBox(0);
-                break;
-            case 1:
-                this.cardArray[1].goodCard = "true";
-                this.buildWordBox(1);
-                break;
-
-            case 2:
-                this.cardArray[2].goodCard = "true";
-                this.buildWordBox(2);
-                break;
-            default:
-                break;
+            this.newCard(this.goodCardIdx, i, this);
         }
 
     },
@@ -214,32 +176,6 @@ LanguageGame.Conveyor.prototype = {
         this.wordBox.addChild(boxText);
     },
 
-    //gets the words for the cards for the game state
-    getCardText: function (num) {
-        var style = {font: "50px Georgia", fill: "000000", align: "center"};
-        switch (num) {
-            case 0:
-                var cardText = this.game.add.text(this.card.width / 2, this.card.height / 2, String.fromCharCode(34253), style);
-                cardText.anchor.set(0.5);
-                return (cardText);
-                break;
-            case 1:
-                var cardText2 = this.game.add.text(this.card.width / 2, this.card.height / 2, String.fromCharCode(32169), style);
-                cardText2.anchor.set(0.5);
-                return (cardText2);
-                break;
-            case 2:
-                var cardText3 = this.game.add.text(this.card.width / 2, this.card.height / 2, String.fromCharCode(32043), style);
-                cardText3.anchor.set(0.5);
-                return (cardText3);
-                break;
-            default:
-                break;
-        }
-
-
-    },
-
     //apply the tween to a card object
     tweenCard: function () {
 
@@ -248,7 +184,7 @@ LanguageGame.Conveyor.prototype = {
             this.tweenArray[i] = this.add.tween(this.cardArray[i]).to({
                 x: [this.xf],
                 y: [y1 + (i * (this.card.height + 5))]
-            }, 7500);
+            }, 5000);
 
             this.cardArray[i].inputEnabled = true;
             this.cardArray[i].events.onInputDown.addOnce(this.stopCard, this, this.game, this.cardArray[i], this.tweenArray[i], this.cardArray[i].goodCard); //will happen when input happens
@@ -282,7 +218,7 @@ LanguageGame.Conveyor.prototype = {
      * does NOT reset the variables associated with that state.  Therefore, this method is called right before any
      * restarts or when leaving the game-state.
      */
-    clear: function(){
+    clear: function () {
         this.lives = 3;
         this.goodCard = 0;
         this.score = 0;
@@ -307,6 +243,55 @@ LanguageGame.Conveyor.prototype = {
     back: function (pointer) {
         this.clear();
         this.state.start('MainMenu');
-    }
+    },
+    /*  Creates a new card
+     *  parameters: goodCardIdx - the random index the correct card should have in cardArray
+     *              i - the index in cardArray of the new card
+     *              game - a reference to the current game
+     */
+    newCard: function (goodCardIdx, i, game) {
+        var card = this.add.image(0-this.card.width, (this.card.height / 2) + (i * (this.card.height + 5)), 'card');
+        //Choose a english-unicode pair at random
+        var catLen = this.results[0]["values"].length;
+        var randNumber = Math.floor(Math.random() * catLen);
+        card.engText= this.results[0]["values"][randNumber][0];
+        var unicodeVal = this.results[0]["values"][randNumber][1];
 
+        //Repeat until the chosen pair is different from any other cards pair
+        while (unicodeVal == this.card1Unicode || unicodeVal == this.card2Unicode || unicodeVal == this.card3Unicode) {
+            randNumber = Math.floor(Math.random() * catLen);
+            card.engText = this.results[0]["values"][randNumber][0];
+            unicodeVal = this.results[0]["values"][randNumber][1];
+        }
+
+        //Increment the number of cards
+        this.numCards++;
+
+        //Set the appropriate card unicode variable
+        this.card1Unicode = (i == 0) ? unicodeVal : this.card1Unicode;
+        this.card2Unicode = (i == 1) ? unicodeVal : this.card2Unicode;
+        this.card3Unicode = (i == 2) ? unicodeVal : this.card3Unicode;
+
+        //Add the card to the game, set the text inside the card, and default the card to not be the correct card
+        var cardStyle = {font: "60px Serif", fill: "000000", align: "center"};
+        var cardText = this.game.add.text(card.width / 2, card.height / 2, String.fromCharCode(unicodeVal), cardStyle);
+        cardText.anchor.set(0.5);
+        card.addChild(cardText);
+        card.goodCard = "false";
+
+        //If this card was meant to be the correct card, set it to be the correct card
+        if (goodCardIdx == i) {
+            card.goodCard = "true";
+            this.goodCard++;
+        }
+
+        //Add the card to the cardArray.
+        this.cardArray[this.numCards - 1] = card;
+
+
+        //If this card is the correct card, set the wordBox to have the English of the card's Chinese
+        if (card.goodCard == "true") {
+            this.buildWordBox(i);
+        }
+    }
 };

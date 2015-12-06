@@ -163,7 +163,7 @@ LanguageGame.Ninja.prototype = {
         this.woops = new Media(getMediaURL('assets/audio/youSuck.mp3'), null, mediaError);
         this.yea = new Media(getMediaURL('assets/audio/yea.mp3'),null, mediaError);
     },
-    //-------------------------  UTILITY FUNCTONS -------------------------//
+    //-------------------------  UTILITY FUNCTIONS -------------------------//
     //The following functions provide utilities that are used in create() and update()
 
     /* Stops a card, adjusting all the necessary information, and then killing the card. Is called when the
