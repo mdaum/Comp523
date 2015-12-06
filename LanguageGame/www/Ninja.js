@@ -50,7 +50,7 @@ LanguageGame.Ninja.prototype = {
             this.yea = new Media(getMediaURL('assets/audio/yea.mp3'), null, mediaError);
         }
 
-        //Set the default font style for the game, usign CSS styling
+        //Set the default font style for the game, using CSS styling
         this.style = {font: "50px Georgia", fill: "000000", align: "center"};
 
         //------- select the category for the round ------------//
@@ -217,7 +217,7 @@ LanguageGame.Ninja.prototype = {
 
         //If this card is the correct card, set the wordBox to have the English of the card's Chinese
         if (card.goodCard == "true") {
-            var newBoxText = this.game.add.text(this.wordBox.width / 2, card.height / 8 + 10, boxWordText, style);
+            var newBoxText = this.game.add.text(this.wordBox.width / 2, card.height / 8 + 10, boxWordText, this.style);
             newBoxText.anchor.set(0.5);
             this.wordBox.removeChild(this.boxText);
             this.wordBox.addChild(newBoxText);
@@ -227,19 +227,19 @@ LanguageGame.Ninja.prototype = {
         //BEGIN TWEENING LOGIC
 
         //Points used to interpolate a Bezier curve
-        var x1 = 4;
-        var x2 = 100;
-        var x3 = 136;
-        var x4 = 300;
-        var x5 = 438;
-        var x6 = 500;
+        var x1 = this.getRandomIntInclusive(0,10);
+        var x2 = this.getRandomIntInclusive(0,(this.game.width*0.2));
+        var x3 = this.getRandomIntInclusive((this.game.width*0.2),(this.game.width*0.4));
+        var x4 = this.getRandomIntInclusive((this.game.width*0.4),(this.game.width*0.6));
+        var x5 = this.getRandomIntInclusive((this.game.width*0.6),(this.game.width*0.8));
+        var x6 = this.getRandomIntInclusive((this.game.width*0.8),(this.game.width));
 
-        var y1 = 483;
-        var y2 = 0;
-        var y3 = 50;
-        var y4 = 0;
-        var y5 = 383;
-        var y6 = 900;
+        var y1 = this.getRandomIntInclusive((this.game.height*0.5),(this.game.height*0.9));
+        var y2 = this.getRandomIntInclusive(0,(this.game.height*.1));
+        var y3 = this.getRandomIntInclusive((this.game.height *.1),(this.game.height *0.3));
+        var y4 = this.getRandomIntInclusive(0,(this.game.height*.1));
+        var y5 = this.getRandomIntInclusive((this.game.height*0.2),(this.game.height*0.9));
+        var y6 = (this.game.height+card.height);
 
         //Create a tween with these points
         var tween = this.add.tween(card).to({
@@ -247,7 +247,7 @@ LanguageGame.Ninja.prototype = {
             y: [y1, y2, y3, y4, y5, y6]
         }, 5000);
 
-        //Interpolate a Bexier curve with the tween
+        //Interpolate a Bezier curve with the tween
         tween.interpolation(function (v, k) {
             return Phaser.Math.bezierInterpolation(v, k);
         });
@@ -297,12 +297,12 @@ LanguageGame.Ninja.prototype = {
         this.state.start('MainMenu');
     },
 
-    //Function to set/reset the livesBox with the apporpiate number if lives
+    //Function to set/reset the livesBox with the appropriate number of lives
     setLivesBox: function () {
         this.livesBox = this.add.image(this.world.width - 200, 10, 'box');
 
         for (var i = this.lives; i > 0; i--) {
-            var life = this.add.image(0 + (30 * i), 0, 'sword');
+            var life = this.add.image((30 * i), 0, 'sword');
             this.livesBox.addChild(life);
         }
     },
@@ -313,7 +313,15 @@ LanguageGame.Ninja.prototype = {
         var scoreText = this.game.add.text(this.scoreBox.width / 2, this.scoreBox.height / 2 - 35, this.score, this.style);
         scoreText.anchor.set(0.5);
         this.scoreBox.addChild(scoreText);
+    },
+
+    // Returns a random integer between min (included) and max (included)
+    // Using Math.round() will give you a non-uniform distribution!
+    getRandomIntInclusive: function(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
     }
+
+
 };
 
 
