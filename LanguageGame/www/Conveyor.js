@@ -98,9 +98,12 @@ LanguageGame.Conveyor.prototype = {
         }
 
         if(this.lives==0){
-            alert("Game Over, Sorry");
-            this.clear()
-            this.create();
+            this.lives = 3;
+            LanguageGame.score = this.score;
+            LanguageGame.multiplier = this.multiplier;
+            LanguageGame.lives = 0;
+            this.clear();
+            this.state.start('ConveyorOver');
         }
     },
 

@@ -153,6 +153,7 @@ LanguageGame.Ninja.prototype = {
             this.lives = 3;
             LanguageGame.score = this.score;
             LanguageGame.multiplier = this.multiplier;
+            LanguageGame.lives = 0;
             this.clear();
             this.state.start('NinjaOver');
         }

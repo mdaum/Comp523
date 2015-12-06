@@ -1,17 +1,19 @@
 /**
  * Created by sgbyers on 06-Dec-15.
  */
-LanguageGame.NinjaGameOver = function (game) {
-    this.ninjaBG = null;        //Background assets for the Ninja game
+/**
+ * Created by sgbyers on 06-Dec-15.
+ */
+LanguageGame.ConveyorGameOver = function (game) {
     this.lives = 0;             //The number of lives the player has remaining
     this.score = 0;             //The current score for the player
     this.style = "";            //The default style to be used by text in the game
     this.multiplier = 1;        //The multiplier for score
 };
 
-LanguageGame.NinjaGameOver.prototype = {
+LanguageGame.ConveyorGameOver.prototype = {
     create: function () {
-        this.ninjaBG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'dojo');
+         var BG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'belt');
 
         //Set the default font style for the game, using CSS styling
         this.style = {font: "30px Georgia", fill: "000000", align: "center"};
@@ -68,7 +70,7 @@ LanguageGame.NinjaGameOver.prototype = {
     },
 
     restart: function (pointer) {
-        this.state.start('Ninja');
+        this.state.start('Conveyor');
     }
 
 };
