@@ -25,6 +25,9 @@ LanguageGame.Ninja = function (game) {
     this.card2Unicode = "";     //The unicode for the second card
     this.card3Unicode = "";     //The unicode for the third card
     this.results = null;        //The results of the most recent database call made in the Ninja game
+    this.yeaPlaying=null;
+    this.gameOverPlaying=null;
+    this.woopsPlaying=null;
 };
 
 //The prototype for the Ninja object
@@ -45,9 +48,10 @@ LanguageGame.Ninja.prototype = {
             this.woops = this.add.audio('woops');
             this.yea = this.add.audio('yea');
         } else {
-            this.gameOver = new Media(getMediaURL('assets/audio/gameOver.mp3'), null, mediaError);
-            this.woops = new Media(getMediaURL('assets/audio/youSuck.mp3'), null, mediaError);
-            this.yea = new Media(getMediaURL('assets/audio/yea.mp3'), null, mediaError);
+            this.gameOverPlaying=false;
+            this.yeaPlaying=false;
+            this.woopsPlaying=false;
+           this.repopulateSounds();
         }
 
         //Set the default font style for the game, using CSS styling
@@ -130,14 +134,32 @@ LanguageGame.Ninja.prototype = {
 
         //If all lives are gone, play the gameOver sound and notify the player
         if (this.lives <= 0) {
+            if(isAndroid){
+                if(this.yeaPlaying){
+                    this.yea.stop();
+                    this.yeaPlaying=false;
+                }
+                if(this.woopsPlaying){
+                    this.woops.stop();
+                    this.woopsPlaying=false;
+                }
+            }
+            else{
+                if(this.yea.isPlaying)this.yea.stop();
+                if(this.woops.isPlaying)this.woops.stop();
+            }
             this.gameOver.play();
-
+            this.gameOverPlaying=true;
             this.lives = 3;
             this.clear();
             this.state.start("Ninja");
         }
     },
-
+    repopulateSounds:function(){
+        this.gameOver = new Media(getMediaURL('assets/audio/gameOver.mp3'), null, mediaError);
+        this.woops = new Media(getMediaURL('assets/audio/youSuck.mp3'), null, mediaError);
+        this.yea = new Media(getMediaURL('assets/audio/yea.mp3'),null, mediaError);
+    },
     //-------------------------  UTILITY FUNCTONS -------------------------//
     //The following functions provide utilities that are used in create() and update()
 
@@ -158,14 +180,44 @@ LanguageGame.Ninja.prototype = {
         if (card.goodCard == "true") {
             this.score += 100 * this.multiplier;
             this.multiplier++;
+            if(isAndroid){
+                if(this.gameOverPlaying){
+                    this.gameOver.stop();
+                    this.gameOverPlaying=false;
+                }
+                if(this.woopsPlaying){
+                    this.woops.stop();
+                    this.woopsPlaying=false;
+                }
+            }
+            else{
+                if(this.gameOver.isPlaying)this.gameOver.stop();
+                if(this.woops.isPlaying)this.woops.stop();
+            }
             this.yea.play();
+            this.yeaPlaying=true;
 
         //If the card was an incorrect card, deduct a life, reset multiplier, and play bad sound
         } else {
             this.lives--;
             this.setLivesBox();
             this.multiplier = 1;
+            if(isAndroid){
+                if(this.yeaPlaying){
+                    this.yea.stop();
+                    this.yeaPlaying=false;
+                }
+                if(this.gameOverPlaying){
+                    this.gameOver.stop();
+                    this.gameOverPlaying=false;
+                }
+            }
+            else{
+                if(this.yea.isPlaying)this.yea.stop();
+                if(this.gameOver.isPlaying)this.gameOver.stop();
+            }
             this.woops.play();
+            this.woopsPlaying=true;
         }
 
         //Kill the card and decrement numCards
