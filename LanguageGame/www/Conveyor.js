@@ -239,7 +239,6 @@ LanguageGame.Conveyor.prototype = {
 
         }
 
-       // if(this.numCards==0||(this.cardArray[0]!=null&&this.cardArray[0].x > 500)){
         if(this.numCards==0){
             this.buildCards();
             this.tweenCard();
