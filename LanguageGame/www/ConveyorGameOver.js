@@ -13,7 +13,7 @@ LanguageGame.ConveyorGameOver = function (game) {
 
 LanguageGame.ConveyorGameOver.prototype = {
     create: function () {
-         var BG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'belt');
+        var BG = this.add.image(this.world.centerX - 270, this.world.centerY - 480, 'belt');
 
         //Set the default font style for the game, using CSS styling
         this.style = {font: "30px Georgia", fill: "000000", align: "center"};
@@ -51,7 +51,12 @@ LanguageGame.ConveyorGameOver.prototype = {
     },
 
     buildBackBox: function () {
+        var graphics = this.game.add.graphics(100, 100);
         var backText = this.add.bitmapText(this.world.centerX - 125, this.game.height - 100, 'eightbitwonder', 'To Menu', 30);
+        graphics.beginFill(0x990000, 0.5);
+        graphics.drawRect(this.world.centerX - (230 + backText.width / 2), this.game.height - 215, backText.width, backText.height);
+        graphics.endFill();
+
         backText.anchor.set(0.5);
         backText.inputEnabled = true; //now we can accept clicks/touches
         backText.events.onInputDown.addOnce(this.back, this); //will happen when input happens
@@ -59,7 +64,12 @@ LanguageGame.ConveyorGameOver.prototype = {
     },
 
     buildRestartBox: function () {
+        var graphics = this.game.add.graphics(100, 100);
         var newGameText = this.add.bitmapText(this.world.centerX + 125, this.game.height - 100, 'eightbitwonder', 'New Game', 30);
+        graphics.beginFill(0x990000, 0.5);
+        graphics.drawRect(this.world.width / 2 + 20 - newGameText.width / 2, this.game.height - 215, newGameText.width, newGameText.height);
+        graphics.endFill();
+
         newGameText.anchor.set(0.5);
         newGameText.inputEnabled = true; //now we can accept clicks/touches
         newGameText.events.onInputDown.addOnce(this.restart, this); //will happen when input happens

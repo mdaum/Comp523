@@ -51,8 +51,8 @@ LanguageGame.NinjaGameOver.prototype = {
     buildBackBox: function () {
         var graphics = this.game.add.graphics(100, 100);
         var backText = this.add.bitmapText(this.world.centerX - 125, this.game.height - 100, 'eightbitwonder', 'To Menu', 30);
-        graphics.beginFill(0xFFFF0B, 0.5);
-        graphics.drawRect(this.world.centerX - (230+backText.width/2), this.game.height-215, backText.width, backText.height);
+        graphics.beginFill(0x990000, 0.5);
+        graphics.drawRect(this.world.centerX - (230 + backText.width / 2), this.game.height - 215, backText.width, backText.height);
         graphics.endFill();
 
         backText.anchor.set(0.5);
@@ -64,12 +64,10 @@ LanguageGame.NinjaGameOver.prototype = {
     buildRestartBox: function () {
         var graphics = this.game.add.graphics(100, 100);
         var newGameText = this.add.bitmapText(this.world.centerX + 125, this.game.height - 100, 'eightbitwonder', 'New Game', 30);
-        //graphics.lineStyle(2, 0x0000FF, 1);
-        graphics.beginFill(0xFFFF0B, 0.5);
-        graphics.drawRect(this.world.width/2+20-newGameText.width/2, this.game.height-215, newGameText.width, newGameText.height);
+        graphics.beginFill(0x990000, 0.5);
+        graphics.drawRect(this.world.width / 2 + 20 - newGameText.width / 2, this.game.height - 215, newGameText.width, newGameText.height);
         graphics.endFill();
 
-        //this.debug.renderRectangle(box,'#0fffff');
         newGameText.anchor.set(0.5);
         newGameText.inputEnabled = true; //now we can accept clicks/touches
         newGameText.events.onInputDown.addOnce(this.restart, this); //will happen when input happens
