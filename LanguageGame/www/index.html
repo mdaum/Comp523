@@ -5,9 +5,9 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width">
     <title>Language Game</title>
-    <script type = "text/javascript" src = "Tests.js"></script>
+ <!--   <script type = "text/javascript" src = "Tests.js"></script>-->
     <script type="text/javascript"src="cordova.js"></script><!--Just comment this out when you want to run w/o cordova-->
-    <script src="libs/phaser.js"></script>
+    <script src="libs/phaser.min.js"></script>
     <script src="libs/sql.js"></script>
     <script src="Boot.js"></script>
     <script src="Preloader.js"></script>
@@ -48,7 +48,7 @@
 <script type="text/javascript">
     window.onload = function() {
 
-       runTests();
+     //  runTests();
 
        var game = new Phaser.Game("105", "105", Phaser.SHOW_ALL, 'gameContainer'); //105 105 for 7-inch tablet   115 115 for phone
         game.state.add('Boot', LanguageGame.Boot);
